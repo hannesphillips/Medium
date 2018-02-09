@@ -42,10 +42,10 @@ public class PostActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
 
-        selectImage = (ImageButton) findViewById(R.id.imageButton);
-        postTitle = (EditText) findViewById(R.id.postTitle);
-        postDescription = (EditText) findViewById(R.id.postDescription);
-        submitButton = (Button) findViewById(R.id.submitPost);
+        selectImage = findViewById(R.id.imageButton);
+        postTitle = findViewById(R.id.postTitle);
+        postDescription = findViewById(R.id.postDescription);
+        submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
 
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +70,8 @@ public class PostActivity extends AppCompatActivity {
     private void sendPost() {
             progress.setMessage("Posting to blog...");
             progress.show();
-            String titleText = postTitle.getText().toString().trim();
-            String descText = postDescription.getText().toString().trim();
+            final String titleText = postTitle.getText().toString().trim();
+            final String descText = postDescription.getText().toString().trim();
 
             if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
                 StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
@@ -82,6 +82,9 @@ public class PostActivity extends AppCompatActivity {
                     {
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         DatabaseReference newPost = database.push();
+                        newPost.child("title").setValue(titleText);
+                        newPost.child("desc").setValue(descText);
+                        newPost.child("image").setValue(downloadUri.toString());
                         progress.dismiss();
                     }
                 });
@@ -95,7 +98,6 @@ public class PostActivity extends AppCompatActivity {
             if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
                 imageUri = data.getData();
                 selectImage.setImageURI(imageUri);
-                ;
             }
         }
     }

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Medium2.0</string>
     <string name="description">imageToBeUploaded</string>
+    <string name="submit_post">Submit Post</string>
+    <string name="post_description">Post Description</string>
+    <string name="post_title">Post Title</string>
+    <string name="ImageUpload">ImageUpload</string>
 </resources>
