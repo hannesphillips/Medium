@@ -69,11 +69,11 @@ public class PostActivity extends AppCompatActivity {
 
     private void sendPost() {
             progress.setMessage("Posting to blog...");
-            progress.show();
             final String titleText = postTitle.getText().toString().trim();
             final String descText = postDescription.getText().toString().trim();
 
             if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+                progress.show();
                 StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
                 filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
                 {
@@ -86,6 +86,8 @@ public class PostActivity extends AppCompatActivity {
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
                         progress.dismiss();
+
+                        startActivity(new Intent(PostActivity.this, MainActivity.class));       //return to timeline
                     }
                 });
             }
