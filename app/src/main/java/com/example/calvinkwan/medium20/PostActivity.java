@@ -65,8 +65,6 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void sendPost() {
             progress.setMessage("Posting to blog...");
             final String titleText = postTitle.getText().toString().trim();
