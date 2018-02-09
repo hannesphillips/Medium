@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Medium2.0</string>
+    <string name="description">imageToBeUploaded</string>
 </resources>
