@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,9 +72,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position)
             {
+                final String post_key = getRef(position).getKey();
+
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDesc());
                 viewHolder.setImage(getApplicationContext(), model.getImage());  //passing image as string link
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // startActivity(new Intent(MainActivity.this, BlogSingle.class));
+                        // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
+                        Intent blogSingleIntent = new Intent(MainActivity.this, BlogSingle.class);
+                        blogSingleIntent.putExtra("blog_id", post_key);
+                        startActivity(blogSingleIntent);
+                    }
+                });
             }
         };
 
