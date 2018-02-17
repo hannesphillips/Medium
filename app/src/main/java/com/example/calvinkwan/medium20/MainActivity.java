@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDesc());
                 viewHolder.setImage(getApplicationContext(), model.getImage());  //passing image as string link
+                viewHolder.setUser(model.getUser());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity {
             Picasso.with(ctx).load(image).into(postImage);
 
         }
+
+        private void setUser(String user)
+        {
+            TextView postUser = mView.findViewById(R.id.postUser);
+            postUser.setText(user);
+        }
+
     }
 
     @Override
