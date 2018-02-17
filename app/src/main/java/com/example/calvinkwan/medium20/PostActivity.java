@@ -12,9 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -25,9 +29,12 @@ public class PostActivity extends AppCompatActivity {
     private ImageButton selectImage;
     private EditText postTitle;
     private EditText postDescription;
+    private EditText postName;
+
     private Button submitButton;
     private StorageReference storage;
     private DatabaseReference database;
+    private DatabaseReference users;
     private ProgressDialog progress;
 
     private Uri imageUri = null;
@@ -45,6 +52,7 @@ public class PostActivity extends AppCompatActivity {
         selectImage = findViewById(R.id.imageButton);
         postTitle = findViewById(R.id.postTitle);
         postDescription = findViewById(R.id.postDescription);
+
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
 
@@ -79,10 +87,27 @@ public class PostActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                     {
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
-                        DatabaseReference newPost = database.push();
+                        final DatabaseReference newPost = database.push();
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
+
+                        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        users = FirebaseDatabase.getInstance().getReference().child("Users");
+                        users.child(user_key).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                final String u  = (String) dataSnapshot.child("name").getValue();
+                                newPost.child("name").setValue(u);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                         progress.dismiss();
 
                         startActivity(new Intent(PostActivity.this, MainActivity.class));       //return to timeline

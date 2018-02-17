@@ -18,12 +18,22 @@
             android:adjustViewBounds="true"/>
 
         <TextView
-            android:id="@+id/postTitle"
+            android:id="@+id/postUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textStyle="bold"
             android:textSize="16sp"
+
+            tools:text="Glorious Leader" />
+
+        <TextView
+            android:id="@+id/postTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
 
             tools:text="hello" />
 

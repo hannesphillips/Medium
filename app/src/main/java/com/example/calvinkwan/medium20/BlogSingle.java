@@ -19,6 +19,7 @@ public class BlogSingle extends AppCompatActivity {
     private ImageView singleImage;
     private TextView singleTitle;
     private TextView singleDesc;
+    private TextView singleName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class BlogSingle extends AppCompatActivity {
         singleImage = findViewById(R.id.imageSingle);
         singleTitle = findViewById(R.id.postTitle);
         singleDesc = findViewById(R.id.postDescription);
+        singleName = findViewById(R.id.postUser);
 
         mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -38,9 +40,11 @@ public class BlogSingle extends AppCompatActivity {
                 String post_title = (String) dataSnapshot.child("title").getValue();
                 String post_desc = (String) dataSnapshot.child("desc").getValue();
                 String post_image = (String) dataSnapshot.child("image").getValue();
+                String post_name = (String) dataSnapshot.child("name").getValue();
 
                 singleTitle.setText(post_title);
                 singleDesc.setText(post_desc);
+                singleName.setText(post_name);
                 Picasso.with(BlogSingle.this).load(post_image).into(singleImage);
             }
 
