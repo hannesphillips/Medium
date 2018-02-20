@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity
             {
                 if(dataSnapshot.hasChild(user_id))
                 {
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent mainIntent = new Intent(LoginActivity.this, BrowserActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
                 }
