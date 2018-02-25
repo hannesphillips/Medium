@@ -151,6 +151,9 @@ public class BrowserActivity extends AppCompatActivity
         if (id == R.id.nav_myPost) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new myPostFragment()).commit();
         }
+        else if (id == R.id.nav_bookmark) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new BookmarksFragment()).commit();
+        }
         else if (id == R.id.nav_notification ){
 //            fragmentManager.beginTransaction().replace(R.id.content_frame, new SecondFragment()).commit();
 //        } else if (id == R.id.nav_slideshow) {
@@ -171,6 +174,10 @@ public class BrowserActivity extends AppCompatActivity
     private void logout()
     {
         Auth.signOut();
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
 }

@@ -1,65 +1,67 @@
 package com.example.calvinkwan.medium20;
 
+
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity  {
-
-    private RecyclerView blogList;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class BookmarksFragment extends Fragment {
+    View myView;
+    private RecyclerView bookmarksView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mdatabase;
-
     private FirebaseAuth Auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Auth = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null)
-                {
-                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent);
-                }
-            }
-        };
-
-        mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
-        blogList = findViewById(R.id.blog_list);
-        blogList.setHasFixedSize(true);
-        blogList.setLayoutManager(new LinearLayoutManager(this));       //sets to vertical format
 
 
+    public BookmarksFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    protected void onStart()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.fragment_bookmarks,container, false);
+
+        Auth = FirebaseAuth.getInstance();
+
+        // Inflate the layout for this fragment
+        bookmarksView = (RecyclerView) myView.findViewById(R.id.my_recycler_view);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        bookmarksView.setLayoutManager(mLayoutManager);
+
+        mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
+
+
+        // return inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        return myView;
+    }
+
+    public void onStart()
     {
         super.onStart();
-        Auth.addAuthStateListener(authStateListener);
         FirebaseRecyclerAdapter<Blog, BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog, BlogViewHolder>(
 
                 Blog.class,
@@ -75,16 +77,16 @@ public class MainActivity extends AppCompatActivity  {
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setTitle(model.getTitle());
-                viewHolder.setDesc(model.getDesc());
-                viewHolder.setImage(getApplicationContext(), model.getImage());  //passing image as string link
                 viewHolder.setUser(model.getUser());
+                viewHolder.setDesc(model.getDesc());
+                viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // startActivity(new Intent(MainActivity.this, BlogSingle.class));
                         // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
-                        Intent blogSingleIntent = new Intent(MainActivity.this, BlogSingle.class);
+                        Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
                         blogSingleIntent.putExtra("blog_id", post_key);
                         startActivity(blogSingleIntent);
                     }
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         };
 
-        blogList.setAdapter(firebaseRecyclerAdapter);
+        bookmarksView.setAdapter(firebaseRecyclerAdapter);
     }
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder
@@ -110,6 +112,12 @@ public class MainActivity extends AppCompatActivity  {
             postTitle.setText(title);
         }
 
+        private void setUser(String user)
+        {
+            TextView postUser = mView.findViewById(R.id.postUser);
+            postUser.setText(user);
+        }
+
         private void setDesc(String desc)
         {
             TextView postDesc = mView.findViewById(R.id.postDesc);
@@ -123,39 +131,15 @@ public class MainActivity extends AppCompatActivity  {
 
         }
 
-        private void setUser(String user)
-        {
-            TextView postUser = mView.findViewById(R.id.postUser);
-            postUser.setText(user);
-        }
+    }
+
+    public void onResume(){
+        super.onResume();
+
+        // Set title bar
+        ((BrowserActivity) getActivity())
+                .setActionBarTitle("Bookmarks");
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if(item.getItemId() == R.id.action_add)
-        {
-            startActivity(new Intent(MainActivity.this, PostActivity.class));
-        }
-
-        if(item.getItemId() == R.id.action_logout)
-        {
-            logout();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void logout()
-    {
-        Auth.signOut();
-    }
 }
