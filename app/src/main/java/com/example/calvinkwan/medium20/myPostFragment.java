@@ -10,10 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +31,7 @@ public class myPostFragment extends Fragment {
     View myView;
     private RecyclerView blogList;
     private DatabaseReference mdatabase;
+//    private ImageButton bookmark;
 
     private FirebaseAuth Auth;
     @Nullable
@@ -43,7 +47,13 @@ public class myPostFragment extends Fragment {
         blogList.setHasFixedSize(true);
         blogList.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
 
-
+//        bookmark = (ImageButton) myView.findViewById(R.id.bookmarkButton);
+//        bookmark.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Toast.makeText(getActivity(), "Bookmarked", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         return myView;
     }
@@ -79,6 +89,14 @@ public class myPostFragment extends Fragment {
                         startActivity(blogSingleIntent);
                     }
                 });
+
+
+//                bookmark.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(getActivity(), "Bookmarked", Toast.LENGTH_LONG).show();
+//                    }
+//                });
             }
         };
 

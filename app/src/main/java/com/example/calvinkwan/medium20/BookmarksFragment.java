@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -32,6 +38,8 @@ public class BookmarksFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mdatabase;
     private FirebaseAuth Auth;
+    private DatabaseReference bookmarks;
+    private DatabaseReference here;
 
 
     public BookmarksFragment() {
@@ -54,6 +62,29 @@ public class BookmarksFragment extends Fragment {
 
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
 
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Users");
+        temp = temp.child(user_key);
+
+        // bookmarks = FirebaseDatabase.getInstance().getReference().child("Users/Bookmarks");
+        bookmarks = temp.child("Bookmarks");
+        // here = bookmarks.child("Bookmarks");
+
+        // Toast.makeText(getActivity(),"hey",Toast.LENGTH_SHORT).show();
+
+        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String count = String.valueOf(dataSnapshot.getChildrenCount());
+                Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         // return inflater.inflate(R.layout.fragment_bookmarks, container, false);
         return myView;
@@ -67,7 +98,7 @@ public class BookmarksFragment extends Fragment {
                 Blog.class,
                 R.layout.blog_row,
                 BlogViewHolder.class,
-                mdatabase
+                bookmarks
         )
         {
 
@@ -75,6 +106,7 @@ public class BookmarksFragment extends Fragment {
             protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position)
             {
                 final String post_key = getRef(position).getKey();
+                Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
 
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setUser(model.getUser());
@@ -85,7 +117,7 @@ public class BookmarksFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         // startActivity(new Intent(MainActivity.this, BlogSingle.class));
-                        // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
+                        // Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
                         Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
                         blogSingleIntent.putExtra("blog_id", post_key);
                         startActivity(blogSingleIntent);
