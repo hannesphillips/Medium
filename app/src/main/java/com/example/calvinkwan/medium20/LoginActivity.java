@@ -53,8 +53,6 @@ public class LoginActivity extends AppCompatActivity
     FirebaseAuth.AuthStateListener mAuthListener;
     //private GoogleSignInClient mGoogleSignInClient;
 
-    private FirebaseAuth Auth;
-
     private DatabaseReference database;
 
     @Override
@@ -168,7 +166,7 @@ public class LoginActivity extends AppCompatActivity
 
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password))
         {
-            Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
             {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -187,7 +185,7 @@ public class LoginActivity extends AppCompatActivity
 
     private void checkUserExists()
     {
-        final String user_id = Auth.getCurrentUser().getUid();
+        final String user_id = mAuth.getCurrentUser().getUid();
 
         database.addValueEventListener(new ValueEventListener()
         {
