@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,7 @@ public class PostActivity extends AppCompatActivity {
     private EditText postTitle;
     private EditText postDescription;
     private EditText postName;
+    private AdapterView.OnItemSelectedListener postCateg;
 
     private Button submitButton;
     private StorageReference storage;
@@ -55,6 +59,15 @@ public class PostActivity extends AppCompatActivity {
 
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
+
+        // Category drop down list
+        Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(PostActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Category));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(myAdapter);
+        // End category drop down lost
+
 
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override

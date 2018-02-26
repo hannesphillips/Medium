@@ -50,6 +50,13 @@
         tools:layout_editor_absoluteX="10dp"
         tools:ignore="RtlHardcoded" />
 
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/postDescription" />
+
     <Button
         android:id="@+id/submitPost"
         android:layout_width="match_parent"

@@ -7,18 +7,19 @@ package com.example.calvinkwan.medium20;
 public class Blog
 {
 
-    private String title, desc, image, name;
+    private String title, desc, image, name, categ;
 
     public Blog()
     {
 
     }
 
-    public Blog(String title, String desc, String image, String name) {
+    public Blog(String title, String desc, String image, String name, String categ) {
         this.title = title;
         this.desc = desc;
         this.image = image;
         this.name = name;
+        this.categ = categ;
     }
 
     public String getTitle() {
@@ -49,5 +50,8 @@ public class Blog
 
     public void setUser(String name) { this.name = name; }
 
+    public String getCateg() { return categ; }
+
+    public void setCateg(String categ) { this.categ = categ; }
 
 }

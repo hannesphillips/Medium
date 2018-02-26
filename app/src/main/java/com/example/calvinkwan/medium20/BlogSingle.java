@@ -33,6 +33,7 @@ public class BlogSingle extends AppCompatActivity {
     private TextView singleTitle;
     private TextView singleDesc;
     private TextView singleName;
+    private TextView singleCateg;
 
     private ImageButton bookmarkButton;
     private Uri imageUri = null;
@@ -66,14 +67,20 @@ public class BlogSingle extends AppCompatActivity {
                 bookmark();
             }
         });
+        //singleCateg = findViewById(R.id.postCateg);
 
         mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                post_title = (String) dataSnapshot.child("title").getValue();
-                post_desc = (String) dataSnapshot.child("desc").getValue();
-                post_image = (String) dataSnapshot.child("image").getValue();
-                post_name = (String) dataSnapshot.child("name").getValue();
+//                post_title = (String) dataSnapshot.child("title").getValue();
+//                post_desc = (String) dataSnapshot.child("desc").getValue();
+//                post_image = (String) dataSnapshot.child("image").getValue();
+//                post_name = (String) dataSnapshot.child("name").getValue();
+                String post_title = (String) dataSnapshot.child("title").getValue();
+                String post_desc = (String) dataSnapshot.child("desc").getValue();
+                String post_image = (String) dataSnapshot.child("image").getValue();
+                String post_name = (String) dataSnapshot.child("name").getValue();
+                String post_categ = (String) dataSnapshot.child("categ").getValue();
 
                 singleTitle.setText(post_title);
                 singleDesc.setText(post_desc);

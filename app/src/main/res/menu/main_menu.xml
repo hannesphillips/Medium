@@ -11,6 +11,10 @@
         android:title="Settings"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_category"
+        android:title="Categories"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_logout"
         android:title="Log Out"
         app:showAsAction="never"/>
