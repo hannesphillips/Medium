@@ -16,7 +16,6 @@ import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +38,7 @@ public class PostActivity extends AppCompatActivity {
     private StorageReference storage;
     private DatabaseReference database;
     private DatabaseReference users;
+    private DatabaseReference likes;
     private ProgressDialog progress;
 
     private Uri imageUri = null;
@@ -52,8 +52,9 @@ public class PostActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
+        //likes = FirebaseDatabase.getInstance().getReference().child("Likes");
 
-        selectImage = findViewById(R.id.imageButton);
+        selectImage = findViewById(R.id.likebutton);
         postTitle = findViewById(R.id.postTitle);
         postDescription = findViewById(R.id.postDescription);
 

@@ -18,8 +18,11 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity  {
@@ -27,8 +30,10 @@ public class MainActivity extends AppCompatActivity  {
     private RecyclerView blogList;
     private DatabaseReference mdatabase;
 
+
     private FirebaseAuth Auth;
     private FirebaseAuth.AuthStateListener authStateListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity  {
         };
 
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
+
         blogList = findViewById(R.id.blog_list);
         blogList.setHasFixedSize(true);
         blogList.setLayoutManager(new LinearLayoutManager(this));       //sets to vertical format

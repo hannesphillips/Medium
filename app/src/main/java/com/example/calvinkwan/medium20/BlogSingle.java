@@ -24,10 +24,13 @@ import com.squareup.picasso.Picasso;
 
 public class BlogSingle extends AppCompatActivity {
     private String postKey = null;
+
     private StorageReference storage;
     private DatabaseReference mDatabase;
     private DatabaseReference bookmarks;
     private DatabaseReference users;
+    private DatabaseReference likes;
+
 
     private ImageView singleImage;
     private TextView singleTitle;
@@ -36,12 +39,16 @@ public class BlogSingle extends AppCompatActivity {
     private TextView singleCateg;
 
     private ImageButton bookmarkButton;
+    private ImageButton likeButton;
+
     private Uri imageUri = null;
 
     private String post_title;
     private String post_desc;
     private String post_image;
     private String post_name;
+
+    boolean mProcessLike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,7 @@ public class BlogSingle extends AppCompatActivity {
         storage = FirebaseStorage.getInstance().getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         users = FirebaseDatabase.getInstance().getReference().child("Users");
+        likes = FirebaseDatabase.getInstance().getReference().child("Likes");
         postKey = getIntent().getExtras().getString("blog_id");
 
         singleImage = findViewById(R.id.imageSingle);
@@ -59,7 +67,36 @@ public class BlogSingle extends AppCompatActivity {
         singleDesc = findViewById(R.id.postDescription);
         singleName = findViewById(R.id.postUser);
         bookmarkButton = findViewById(R.id.bookmark);
+        likeButton = findViewById(R.id.likebtn);
 
+        //FOR LIKES:::
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
+                String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference addLike = users.child(userkey);
+                DatabaseReference here = addLike.child("Likes");
+                final DatabaseReference newLike = here.push();
+                newLike.child("title").setValue(post_title);
+            }
+        });
+
+        mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                post_name = (String) dataSnapshot.child("name").getValue();
+
+                singleName.setText(post_name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //FOR BOOKMARKS:
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +130,11 @@ public class BlogSingle extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
     }
 
     private void bookmark() {

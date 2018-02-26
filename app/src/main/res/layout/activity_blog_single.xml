@@ -76,5 +76,14 @@
             android:backgroundTint="@color/cardview_light_background"
             app:srcCompat="@drawable/ic_bookmark_black_24dp" />
 
+        <ImageButton
+            android:id="@+id/likebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageSingle"
+            android:layout_marginStart="11dp"
+            app:srcCompat="@drawable/thumbup" />
+
     </RelativeLayout>
 </ScrollView>
