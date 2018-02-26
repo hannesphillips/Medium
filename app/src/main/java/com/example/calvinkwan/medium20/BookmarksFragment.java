@@ -84,6 +84,18 @@ public class BookmarksFragment extends Fragment {
 
             }
         });
+//        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                String count = String.valueOf(dataSnapshot.getChildrenCount());
+//                Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         // return inflater.inflate(R.layout.fragment_bookmarks, container, false);
@@ -106,7 +118,8 @@ public class BookmarksFragment extends Fragment {
             protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position)
             {
                 final String post_key = getRef(position).getKey();
-                Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
+
+                // Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
 
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setUser(model.getUser());
@@ -171,6 +184,8 @@ public class BookmarksFragment extends Fragment {
         // Set title bar
         ((BrowserActivity) getActivity())
                 .setActionBarTitle("Bookmarks");
+//        ((BrowserActivity) getActivity())
+//                .setActionBarTitle("Bookmarks");
 
     }
 
