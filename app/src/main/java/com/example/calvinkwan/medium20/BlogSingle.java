@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,6 +57,9 @@ public class BlogSingle extends AppCompatActivity {
     private String bPostKey;
 
     boolean mProcessLike;
+
+    String curr_user = "";
+    String poster = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,10 +155,6 @@ public class BlogSingle extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
 
     private void bookmark() {
@@ -204,4 +205,81 @@ public class BlogSingle extends AppCompatActivity {
         finish();
         // return;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.blog_single_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // get name of post
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
+        postKey = getIntent().getExtras().getString("blog_id");
+        assert postKey != null;
+        mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String s = (String) dataSnapshot.child("name").getValue();
+                if(s != null) poster = s;
+            }
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        // get name of user
+
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase.child(user_key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final String u  = (String) dataSnapshot.child("name").getValue();
+                if(u != null) curr_user = u;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        boolean q = curr_user.equals(poster);
+        if (q)
+        {
+            // Add delete option
+            menu.findItem(R.id.del_post).setVisible(true);
+        }
+        else
+        {
+            menu.findItem(R.id.del_post).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == R.id.del_post)
+        {
+            delPost();
+            Intent toMain = new Intent(this, MainActivity.class);
+            startActivity(toMain);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    void delPost() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
+        postKey = getIntent().getExtras().getString("blog_id");
+        if (postKey != null) mDatabase.child(postKey).removeValue();
+
+        return;
+    }
+
 }
