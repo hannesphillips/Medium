@@ -201,6 +201,10 @@ public class BlogSingle extends AppCompatActivity {
     }
 
     void delBookmark() {
+        mDatabase = users;
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase = mDatabase.child(user_key);
+        mDatabase = mDatabase.child("Bookmarks");
         mDatabase.child(postKey).removeValue();
         finish();
         // return;
