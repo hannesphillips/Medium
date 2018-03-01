@@ -56,7 +56,7 @@ public class BlogSingle extends AppCompatActivity {
 
     private String bPostKey;
 
-    boolean mProcessLike;
+    boolean mProcessLike = false;
 
     String curr_user = "";
     String poster = "";
@@ -98,11 +98,42 @@ public class BlogSingle extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
-                String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
                 DatabaseReference addLike = users.child(userkey);
-                DatabaseReference here = addLike.child("Likes");
-                final DatabaseReference newLike = here.push();
-                newLike.child("title").setValue(post_title);
+                DatabaseReference blah = addLike.child("Likes");
+                final DatabaseReference newLike = blah.child(postKey);
+               // final String x = newLike.getKey();
+
+               // Log.d("test2: ", x);
+
+                mProcessLike = true;
+
+                blah.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(mProcessLike) {
+                            //Log.d("test",postKey);
+                            System.out.println(dataSnapshot.getKey());
+                            if(dataSnapshot.hasChild(postKey)) {
+                                delLike();
+                                mProcessLike = false;
+                        }
+
+                        else {
+                                newLike.child("title").setValue(post_title);
+                                newLike.child("desc").setValue(post_desc);
+                                newLike.child("postkey").setValue(postKey);
+                                mProcessLike = false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
@@ -208,6 +239,14 @@ public class BlogSingle extends AppCompatActivity {
         mDatabase.child(postKey).removeValue();
         finish();
         // return;
+    }
+
+    void delLike() {
+        mDatabase = users;
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase = mDatabase.child(user_key).child("Likes");
+        mDatabase.child(postKey).removeValue();
+        finish();
     }
 
     @Override
