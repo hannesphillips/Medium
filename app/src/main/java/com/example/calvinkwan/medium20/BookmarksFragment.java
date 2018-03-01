@@ -1,6 +1,7 @@
 package com.example.calvinkwan.medium20;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +40,8 @@ public class BookmarksFragment extends Fragment {
     private DatabaseReference mdatabase;
     private FirebaseAuth Auth;
     private DatabaseReference bookmarks;
-    private DatabaseReference here;
 
+    private String POSTkey;
 
     public BookmarksFragment() {
         // Required empty public constructor
@@ -66,9 +67,7 @@ public class BookmarksFragment extends Fragment {
         DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Users");
         temp = temp.child(user_key);
 
-        // bookmarks = FirebaseDatabase.getInstance().getReference().child("Users/Bookmarks");
         bookmarks = temp.child("Bookmarks");
-        // here = bookmarks.child("Bookmarks");
 
         // Toast.makeText(getActivity(),"hey",Toast.LENGTH_SHORT).show();
 
@@ -76,7 +75,7 @@ public class BookmarksFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String count = String.valueOf(dataSnapshot.getChildrenCount());
-                Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -117,7 +116,10 @@ public class BookmarksFragment extends Fragment {
             @Override
             protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position)
             {
+                // fix post_key
+
                 final String post_key = getRef(position).getKey();
+                // viewHolder.setKey(model.getKey());
 
                 // Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
 
@@ -133,6 +135,7 @@ public class BookmarksFragment extends Fragment {
                         // Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
                         Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
                         blogSingleIntent.putExtra("blog_id", post_key);
+                        blogSingleIntent.putExtra("flag", 1);
                         startActivity(blogSingleIntent);
                     }
                 });
@@ -174,6 +177,12 @@ public class BookmarksFragment extends Fragment {
             ImageView postImage = mView.findViewById(R.id.postImage);
             Picasso.with(ctx).load(image).into(postImage);
 
+        }
+
+        private void setKey(String key) {
+            String postkey = key;
+            Activity activity = (Activity)mView.getContext();
+            Toast.makeText(activity ,postkey,Toast.LENGTH_SHORT).show();
         }
 
     }

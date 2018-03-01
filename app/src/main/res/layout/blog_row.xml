@@ -19,18 +19,6 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <ImageButton
-            android:id="@+id/bookmarkButton"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/cardview_light_background"
-            app:srcCompat="@drawable/ic_bookmark_black_24dp" />
-
         <TextView
             android:id="@+id/postUser"
             android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,6 +49,11 @@ public class BlogSingle extends AppCompatActivity {
     private String post_image;
     private String post_name;
 
+    private int flag;
+    private boolean bkbut = false;
+
+    private String bPostKey;
+
     boolean mProcessLike;
 
     @Override
@@ -61,6 +67,19 @@ public class BlogSingle extends AppCompatActivity {
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         likes = FirebaseDatabase.getInstance().getReference().child("Likes");
         postKey = getIntent().getExtras().getString("blog_id");
+
+        flag = 0;
+        flag = getIntent().getExtras().getInt("flag");
+
+        // change mdatabase
+        if (flag == 1) {
+            mDatabase = users;
+            String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            mDatabase = mDatabase.child(user_key);
+            mDatabase = mDatabase.child("Bookmarks");
+        }
+
+        // Toast.makeText(BlogSingle.this, postKey, Toast.LENGTH_LONG).show();
 
         singleImage = findViewById(R.id.imageSingle);
         singleTitle = findViewById(R.id.postTitle);
@@ -82,25 +101,25 @@ public class BlogSingle extends AppCompatActivity {
             }
         });
 
-        mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                post_name = (String) dataSnapshot.child("name").getValue();
-
-                singleName.setText(post_name);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                post_name = (String) dataSnapshot.child("name").getValue();
+//
+//                singleName.setText(post_name);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         //FOR BOOKMARKS:
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
+                // Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
                 bookmark();
             }
         });
@@ -138,61 +157,6 @@ public class BlogSingle extends AppCompatActivity {
     }
 
     private void bookmark() {
-//        StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
-//
-//        filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-//        {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-//            {
-//                Uri downloadUri = taskSnapshot.getDownloadUrl();
-//                final DatabaseReference newPost = mDatabase.push();
-//                newPost.child("title").setValue(post_title);
-//                newPost.child("desc").setValue(post_desc);
-//                newPost.child("image").setValue(post_image);
-//
-//                String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//                users = FirebaseDatabase.getInstance().getReference().child("Users");
-//                users.child(user_key).addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        final String u  = (String) dataSnapshot.child("name").getValue();
-//                        newPost.child("name").setValue(u);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-//
-//
-//                startActivity(new Intent(PostActivity.this, MainActivity.class));       //return to timeline
-//            }
-//        });
-
-//        final DatabaseReference newPost = mDatabase.push();
-//        newPost.child("bookmarks");
-////        newPost.child("title").setValue(post_title);
-////        newPost.child("desc").setValue(post_desc);
-////        newPost.child("image").setValue(post_image);
-//
-//        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        bookmarks = FirebaseDatabase.getInstance().getReference().child("Users");
-//        bookmarks.child(user_key).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        final DatabaseReference newPost = users.push();
-//        newPost.child("bookmarks");
 
 
         // NOTE: DOESN'T CHECK FOR DUPLICATE BOOKMARKS
@@ -201,11 +165,43 @@ public class BlogSingle extends AppCompatActivity {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference addBookmark = users.child(user_key);
         DatabaseReference here = addBookmark.child("Bookmarks");
-        final DatabaseReference newBookmark = here.push();
-        // newBookmark.setValue(postKey);
-        newBookmark.child("title").setValue(post_title);
-        newBookmark.child("desc").setValue(post_desc);
-        newBookmark.child("image").setValue(post_image);
 
+        // if postkey in bookmarks, unbookmark
+
+        final DatabaseReference newBookmark = here.push();
+
+        bkbut = true;
+
+        here.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (bkbut) {
+                    if (dataSnapshot.hasChild(postKey)) {
+                        delBookmark();
+                        bkbut = false;
+                    } else {
+                        newBookmark.child("title").setValue(post_title);
+                        newBookmark.child("desc").setValue(post_desc);
+                        newBookmark.child("image").setValue(post_image);
+                        newBookmark.child("postkey").setValue(postKey);
+                        bkbut = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    void delBookmark() {
+        mDatabase.child(postKey).removeValue();
+        finish();
+        // return;
     }
 }

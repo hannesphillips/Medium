@@ -139,4 +139,15 @@ public class myPostFragment extends Fragment {
 
     }
 
+    public void onResume(){
+        super.onResume();
+
+        // Set title bar
+        ((BrowserActivity) getActivity())
+                .setActionBarTitle("MyPosts");
+//        ((BrowserActivity) getActivity())
+//                .setActionBarTitle("Bookmarks");
+
+    }
+
 }
