@@ -200,7 +200,8 @@ public class BlogSingle extends AppCompatActivity {
 
         // if postkey in bookmarks, unbookmark
 
-        final DatabaseReference newBookmark = here.push();
+        // final DatabaseReference newBookmark = here.push();
+        final DatabaseReference newBookmark = here.child(postKey);
 
         bkbut = true;
 
@@ -210,13 +211,17 @@ public class BlogSingle extends AppCompatActivity {
 
                 if (bkbut) {
                     if (dataSnapshot.hasChild(postKey)) {
+                        Toast.makeText(BlogSingle.this, "Bookmark Removed", Toast.LENGTH_LONG).show();
                         delBookmark();
                         bkbut = false;
                     } else {
+                        Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
                         newBookmark.child("title").setValue(post_title);
                         newBookmark.child("desc").setValue(post_desc);
                         newBookmark.child("image").setValue(post_image);
-                        newBookmark.child("postkey").setValue(postKey);
+                        newBookmark.child("name").setValue(post_name);
+                        // newBookmark.child("postkey").setValue(postKey);
+
                         bkbut = false;
                     }
                 }
