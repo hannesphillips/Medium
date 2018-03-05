@@ -46,6 +46,11 @@ public class myPostFragment extends Fragment {
         blogList = myView.findViewById(R.id.blog_list);
         blogList.setHasFixedSize(true);
         blogList.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        blogList.setLayoutManager(layoutManager);
+
 
 //        bookmark = (ImageButton) myView.findViewById(R.id.bookmarkButton);
 //        bookmark.setOnClickListener(new View.OnClickListener() {

@@ -36,7 +36,7 @@ public class BookmarksFragment extends Fragment {
     View myView;
     private RecyclerView bookmarksView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    // private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mdatabase;
     private FirebaseAuth Auth;
     private DatabaseReference bookmarks;
@@ -58,8 +58,12 @@ public class BookmarksFragment extends Fragment {
         bookmarksView = (RecyclerView) myView.findViewById(R.id.my_recycler_view);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        bookmarksView.setLayoutManager(mLayoutManager);
+        // mLayoutManager = new LinearLayoutManager(getActivity());
+        // bookmarksView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        bookmarksView.setLayoutManager(layoutManager);
 
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
 

@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity  {
         blogList = findViewById(R.id.blog_list);
         blogList.setHasFixedSize(true);
         blogList.setLayoutManager(new LinearLayoutManager(this));       //sets to vertical format
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        blogList.setLayoutManager(layoutManager);
 
 
     }
