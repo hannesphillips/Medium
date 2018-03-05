@@ -3,11 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Medium.iml" filepath="$PROJECT_DIR$/Medium.iml" />
-<<<<<<< HEAD
-=======
-      <module fileurl="file://$PROJECT_DIR$/Medium20.iml" filepath="$PROJECT_DIR$/Medium20.iml" />
->>>>>>> a2d94a22deb40e53ef9903d6ac8c39369eb5af84
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
