@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +41,10 @@ public class PostActivity extends AppCompatActivity {
     private DatabaseReference users;
     private DatabaseReference likes;
     private ProgressDialog progress;
-
+    private DatabaseReference mtemp;
+    private String postKey = null;
+    private String user_key = null;
+    private String key = null;
     private Uri imageUri = null;
 
     private static final int GALLERY_REQUEST = 1;
@@ -52,7 +56,9 @@ public class PostActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
+//        mtemp = FirebaseDatabase.getInstance().getReference().child("Users");
         //likes = FirebaseDatabase.getInstance().getReference().child("Likes");
+//        postKey = getIntent().getExtras().getString("postID");
 
         selectImage = findViewById(R.id.likebutton);
         postTitle = findViewById(R.id.postTitle);
@@ -83,10 +89,76 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendPost();
+
+                           }
+        });
+//        Log.d("Test", "so close");
+//        postKey = getIntent().getExtras().getString("blog_id");
+//        final DatabaseReference newtemp = mtemp.child(postKey);
+
+
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        users = FirebaseDatabase.getInstance().getReference().child("Users");
+        users.child(user_key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                        final String u  = (String) dataSnapshot.child("name").getValue();
+//                        newtemp.child("name").setValue(u);
+//            dataSnapshot.getKey();
+//            Log.d("Test", dataSnapshot.getRef().toString());
+//                                postKey = getIntent().getExtras().getString("blog_id");
+//                newtemp.child("postkey").setValue(postKey);
+//                                users.child("Posts").setValue(postKey);
+//                                users.child("Blogs").setValue(postKey);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
-    }
 
+    }
+    boolean mProcessLike = false;
+    private void addPost()
+    {
+        user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference postID = users.child(user_key);
+        DatabaseReference firststep = postID.child("PostId");
+        firststep.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (mProcessLike) {
+                Log.d("Test", "Fk" + postKey);
+                System.out.println(dataSnapshot.getKey());
+                if (dataSnapshot.hasChild(postKey)) {
+//                        delLike();
+                    mProcessLike = false;
+                }
+
+
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+//        postKey = getIntent().getExtras().getString("post_id");
+////        Log.d("Test","This is the key" + key);
+////        final DatabaseReference finalID = firststep.child(key);
+//        Bundle extras = getIntent().getExtras();
+//        if(extras != null){
+//            postKey = extras.getString("blog_id");
+//            Log.d("Test","yeah" + postKey);
+//        }
+//        else
+//        {
+//            Log.d("Test","nope");// + postKey);
+//        }
+
+    }
     private void sendPost() {
             progress.setMessage("Posting to blog...");
             final String titleText = postTitle.getText().toString().trim();
@@ -102,9 +174,11 @@ public class PostActivity extends AppCompatActivity {
                     {
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         final DatabaseReference newPost = database.push();
+
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
+//                        final DatabaseReference new = here.child(postKey);
 
                         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         users = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -113,6 +187,12 @@ public class PostActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 final String u  = (String) dataSnapshot.child("name").getValue();
                                 newPost.child("name").setValue(u);
+//                                Log.d("Test",postKey);
+//                                postKey = getIntent().getExtras().getString("blog_id");
+//                                newtemp.child("postkey").setValue(postKey);
+//                                users.child("Posts").setValue(postKey);
+//                                users.child("Blogs").setValue(postKey);
+
                             }
 
                             @Override
@@ -123,8 +203,8 @@ public class PostActivity extends AppCompatActivity {
 
 
                         progress.dismiss();
-
-                        startActivity(new Intent(PostActivity.this, MainActivity.class));       //return to timeline
+                        addPost();
+                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
                     }
                 });
             }

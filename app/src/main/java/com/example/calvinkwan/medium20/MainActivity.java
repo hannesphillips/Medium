@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView blogList;
     private DatabaseReference mdatabase;
+    private DatabaseReference temp;
 
 
     private FirebaseAuth Auth;

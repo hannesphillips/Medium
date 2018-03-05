@@ -5,6 +5,7 @@ import android.graphics.LightingColorFilter;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,6 +41,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
+import org.w3c.dom.Text;
+
 public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = "GoogleActivity";
@@ -50,17 +54,20 @@ public class LoginActivity extends AppCompatActivity
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
+    private TextView nameView;
     FirebaseAuth.AuthStateListener mAuthListener;
+
     //private GoogleSignInClient mGoogleSignInClient;
 
     private DatabaseReference database;
-
+//    final Fragment frag = getSupportFragmentManager().findFragmentById(R.id.navigation_header_browser);
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+//        setContentView(R.layout.activity_browser);
 
         database = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -195,6 +202,10 @@ public class LoginActivity extends AppCompatActivity
             {
                 if(dataSnapshot.hasChild(user_id))
                 {
+//                    frag.getView().findViewById(R.id.email).set;
+//                    nameView = (TextView) frag.getView().findViewById(R.id.email);
+//                    nameView.setText(user_id);
+//                    Log.d("Test",user_id);
                     Intent mainIntent = new Intent(LoginActivity.this, BrowserActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);

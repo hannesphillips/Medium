@@ -33,6 +33,7 @@ public class BlogSingle extends AppCompatActivity {
     private DatabaseReference bookmarks;
     private DatabaseReference users;
     private DatabaseReference likes;
+    private DatabaseReference temp;
 
 
     private ImageView singleImage;
@@ -72,7 +73,37 @@ public class BlogSingle extends AppCompatActivity {
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         likes = FirebaseDatabase.getInstance().getReference().child("Likes");
         postKey = getIntent().getExtras().getString("blog_id");
+//        temp = FirebaseDatabase.getInstance().getReference().child("Users");
+        temp = users.child("Posts");
+        final DatabaseReference totally = temp.child(postKey);
+        Log.d("Test", "this is blogsingle test 1 " + totally.toString());
 
+        temp.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(mProcessLike) {
+                    Log.d("Test",postKey);
+                    System.out.println(dataSnapshot.getKey());
+                    if(dataSnapshot.hasChild(postKey)) {
+//                        delLike();
+                        mProcessLike = false;
+                    }
+
+//                    else {
+////                        newLike.child("title").setValue(post_title);
+////                        newLike.child("desc").setValue(post_desc);
+//                        totally.child("postkey").setValue(postKey);
+//
+//                        mProcessLike = false;
+//                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         flag = 0;
         flag = getIntent().getExtras().getInt("flag");
 
@@ -82,6 +113,8 @@ public class BlogSingle extends AppCompatActivity {
             String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
             mDatabase = mDatabase.child(user_key);
             mDatabase = mDatabase.child("Bookmarks");
+
+//            users.child("Posts").setValue(postKey);
         }
 
         // Toast.makeText(BlogSingle.this, postKey, Toast.LENGTH_LONG).show();
@@ -124,6 +157,7 @@ public class BlogSingle extends AppCompatActivity {
                                 newLike.child("title").setValue(post_title);
                                 newLike.child("desc").setValue(post_desc);
                                 newLike.child("postkey").setValue(postKey);
+
                                 mProcessLike = false;
                             }
                         }
@@ -199,8 +233,8 @@ public class BlogSingle extends AppCompatActivity {
         DatabaseReference here = addBookmark.child("Bookmarks");
 
         // if postkey in bookmarks, unbookmark
-
-        // final DatabaseReference newBookmark = here.push();
+//        DatabaseReference idk = addBookmark.child("Posts");
+//         final DatabaseReference newIdk = idk.push();
         final DatabaseReference newBookmark = here.child(postKey);
 
         bkbut = true;
@@ -221,6 +255,7 @@ public class BlogSingle extends AppCompatActivity {
                         newBookmark.child("image").setValue(post_image);
                         newBookmark.child("name").setValue(post_name);
                         // newBookmark.child("postkey").setValue(postKey);
+
 
                         bkbut = false;
                     }
