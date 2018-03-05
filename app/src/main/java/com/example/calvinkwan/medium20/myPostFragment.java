@@ -82,7 +82,8 @@ public class myPostFragment extends Fragment {
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDesc());
                 viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());  //passing image as string link
-                viewHolder.setUser(model.getUser());
+                // viewHolder.setUser(model.getUser());
+                viewHolder.setUser(model.getName());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override

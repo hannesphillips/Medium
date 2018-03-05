@@ -128,7 +128,8 @@ public class BookmarksFragment extends Fragment {
                 // Toast.makeText(getActivity(),post_key,Toast.LENGTH_SHORT).show();
 
                 viewHolder.setTitle(model.getTitle());
-                viewHolder.setUser(model.getUser());
+                // viewHolder.setUser(model.getUser());
+                viewHolder.setUser(model.getName());
                 viewHolder.setDesc(model.getDesc());
                 viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
 

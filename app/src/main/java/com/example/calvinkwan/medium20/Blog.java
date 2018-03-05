@@ -50,6 +50,10 @@ public class Blog
 
     public void setUser(String name) { this.name = name; }
 
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
     public String getCateg() { return categ; }
 
     public void setCateg(String categ) { this.categ = categ; }
