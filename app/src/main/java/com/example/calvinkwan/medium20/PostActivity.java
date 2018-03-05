@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -122,9 +123,11 @@ public class PostActivity extends AppCompatActivity {
     boolean mProcessLike = false;
     private void addPost()
     {
+
         user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference postID = users.child(user_key);
-        DatabaseReference firststep = postID.child("PostId");
+        final DatabaseReference firststep = postID.child("PostId").push();
+//        postKey = getIntent().getExtras().getString("post_id");
         firststep.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -145,7 +148,7 @@ public class PostActivity extends AppCompatActivity {
 
         }
     });
-//        postKey = getIntent().getExtras().getString("post_id");
+
 ////        Log.d("Test","This is the key" + key);
 ////        final DatabaseReference finalID = firststep.child(key);
 //        Bundle extras = getIntent().getExtras();
@@ -175,12 +178,16 @@ public class PostActivity extends AppCompatActivity {
                         Uri downloadUri = taskSnapshot.getDownloadUrl();
                         final DatabaseReference newPost = database.push();
 
+                        String newPostKey = newPost.getKey();
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
+
 //                        final DatabaseReference new = here.child(postKey);
 
                         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        newPost.child("userKey").setValue(user_key);
+//                        Log.d("Test" , new)
                         users = FirebaseDatabase.getInstance().getReference().child("Users");
                         users.child(user_key).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -203,7 +210,16 @@ public class PostActivity extends AppCompatActivity {
 
 
                         progress.dismiss();
-                        addPost();
+//                        addPost();//get user logged in
+                        DatabaseReference currentUser = users.child(user_key);
+                        //get posts
+                        DatabaseReference userPosts = currentUser.child("Posts");
+                        final DatabaseReference temp = userPosts.child(newPostKey);
+//                        Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
+//                        userPost.child("blog".setValue(post_title);
+
+                        //add post
+//                        userPosts.child(newPostKey);
                         startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
                     }
                 });

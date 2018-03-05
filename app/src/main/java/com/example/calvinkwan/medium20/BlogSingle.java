@@ -350,7 +350,7 @@ public class BlogSingle extends AppCompatActivity {
         if(item.getItemId() == R.id.del_post)
         {
             delPost();
-            Intent toMain = new Intent(this, MainActivity.class);
+            Intent toMain = new Intent(this, BrowserActivity.class);
             startActivity(toMain);
         }
 

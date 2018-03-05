@@ -44,6 +44,8 @@ public class profileFragment extends Fragment {
     private FirebaseAuth Auth;
     private DatabaseReference profilePost;
     private String postKey = null;
+    private String userKey = null;
+    private boolean test = false;
     public profileFragment()
     {
 
@@ -54,34 +56,151 @@ public class profileFragment extends Fragment {
                              Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_profile, container, false);
         Auth = FirebaseAuth.getInstance();
+
+
         profilepostView = (RecyclerView) myView.findViewById(R.id.my_post_recycler);
 
+        profilepostView.setHasFixedSize(true);
+        profilepostView.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         profilepostView.setLayoutManager(layoutManager);
+
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
+        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 //        postKey =getActivity().getIntent().getExtras().getString("blog_id");
 
-        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Users");
-        temp = temp.child(user_key);
-        profilePost = temp.child("personalPost");
-        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String count = String.valueOf(dataSnapshot.getChildrenCount());
-                // Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Users");
+//        temp = temp.child(user_key);
+//        profilePost = temp.child("personalPost");
+//        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                String count = String.valueOf(dataSnapshot.getChildrenCount());
+//                // Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
         return myView;
     }
+    public void onStart()
+    {
+        super.onStart();
+        FirebaseRecyclerAdapter<Blog, profileFragment.BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog, profileFragment.BlogViewHolder>(
+
+                Blog.class,
+                R.layout.blog_row,
+                BlogViewHolder.class,
+                mdatabase
+        )
+        {
+
+            @Override
+            protected void populateViewHolder(final profileFragment.BlogViewHolder viewHolder, Blog model, int position) {
+                final String post_key = getRef(position).getKey();
+                test = (viewHolder.sameUserKey(post_key));
+                Log.d("Test" , "Fkkk it worked" + test);
+                if (test)
+                {
+
+                    viewHolder.setTitle(model.getTitle());
+                    viewHolder.setDesc(model.getDesc());
+                    viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());  //passing image as string link
+                    // viewHolder.setUser(model.getUser());
+                    viewHolder.setUser(model.getName());
+
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // startActivity(new Intent(MainActivity.this, BlogSingle.class));
+                            // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
+                            Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
+                            blogSingleIntent.putExtra("blog_id", post_key);
+
+                            startActivity(blogSingleIntent);
+                        }
+                    });
+                    test = false;
+              }
+
+
+//                bookmark.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(getActivity(), "Bookmarked", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+            }
+        };
+
+        profilepostView.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    public static class BlogViewHolder extends RecyclerView.ViewHolder
+    {
+        View mView;
+
+        public BlogViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+        }
+        private void setTitle(String title)
+        {
+            TextView postTitle = mView.findViewById(R.id.postTitle);
+            postTitle.setText(title);
+        }
+        private boolean sameUserKey(String key)
+        {
+            boolean value = false;
+            String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if(user_key == key)
+            {
+                value = true;
+                Log.d("Test", "Real shit " + key + " and other one" + user_key);
+            }
+            return value;
+        }
+        private void setDesc(String desc)
+        {
+            TextView postDesc = mView.findViewById(R.id.postDesc);
+            postDesc.setText(desc);
+        }
+
+        private void setImage(Context ctx, String image)
+        {
+            ImageView postImage = mView.findViewById(R.id.postImage);
+            Picasso.with(ctx).load(image).into(postImage);
+
+        }
+
+        private void setUser(String user)
+        {
+            TextView postUser = mView.findViewById(R.id.postUser);
+            postUser.setText(user);
+        }
+
+    }
+
+    public void onResume(){
+        super.onResume();
+
+        // Set title bar
+        ((BrowserActivity) getActivity())
+                .setActionBarTitle("MyPosts");
+//        ((BrowserActivity) getActivity())
+//                .setActionBarTitle("Bookmarks");
+
+    }
+
+//}
     private void addtopersonal()
     {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();

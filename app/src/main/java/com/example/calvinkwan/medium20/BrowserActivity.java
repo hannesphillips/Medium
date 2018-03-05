@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 public class BrowserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    View myView;
     private FirebaseAuth Auth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private String postKey = null;
@@ -40,6 +41,7 @@ public class BrowserActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
+
 //        final Fragment frag = getSupportFragmentManager().findFragmentById(R.id.navigation_header_browser);
 //        View myView = inflater.inflate(R.layout.nav_header_browser,container, false);
 //        usersname = myView.findViewById(R.id.userName);
