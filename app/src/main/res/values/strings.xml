@@ -14,6 +14,7 @@
 
     // Category drop down items
     <string-array name="Category" >
+        <item>Post Category</item>
         <item>Art</item>
         <item>Food</item>
         <item>Sports</item>

@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,6 +103,12 @@ public class BrowserActivity extends AppCompatActivity
         {
             TextView postUser = mView.findViewById(R.id.postUser);
             postUser.setText(user);
+        }
+
+        private void setCateg(String categ)
+        {
+            Spinner postCateg = mView.findViewById(R.id.spinner1);
+            postCateg.getSelectedItem();
         }
 
     }

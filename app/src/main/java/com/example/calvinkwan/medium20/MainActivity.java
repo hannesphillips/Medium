@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -140,6 +141,12 @@ public class MainActivity extends AppCompatActivity  {
         {
             TextView postUser = mView.findViewById(R.id.postUser);
             postUser.setText(user);
+        }
+
+        private void setCateg(String categ)
+        {
+            Spinner postCateg = mView.findViewById(R.id.spinner1);
+            postCateg.getSelectedItem();
         }
 
     }

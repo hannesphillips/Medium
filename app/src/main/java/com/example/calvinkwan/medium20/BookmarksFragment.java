@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -182,6 +183,12 @@ public class BookmarksFragment extends Fragment {
             ImageView postImage = mView.findViewById(R.id.postImage);
             Picasso.with(ctx).load(image).into(postImage);
 
+        }
+
+        private void setCateg(String categ)
+        {
+            Spinner postCateg = mView.findViewById(R.id.spinner1);
+            postCateg.getSelectedItem();
         }
 
         private void setKey(String key) {

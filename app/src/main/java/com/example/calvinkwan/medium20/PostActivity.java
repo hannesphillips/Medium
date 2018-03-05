@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +34,7 @@ public class PostActivity extends AppCompatActivity {
     private EditText postTitle;
     private EditText postDescription;
     private EditText postName;
-    private AdapterView.OnItemSelectedListener postCateg;
+    private Spinner postCateg;
 
     private Button submitButton;
     private StorageReference storage;
@@ -44,6 +46,10 @@ public class PostActivity extends AppCompatActivity {
     private Uri imageUri = null;
 
     private static final int GALLERY_REQUEST = 1;
+
+    // Category var
+    String record;
+    TextView display_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +67,49 @@ public class PostActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
 
-        // Category drop down list
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+        // <------------------------- Category drop down list ------------------------------------->
+        display_data = (TextView)findViewById(R.id.display_result);
+
+        final Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(PostActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Category));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
-        // End category drop down lost
+
+        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 1:
+                        record = "Art";
+                        break;
+                    case 2:
+                        record = "Food";
+                        break;
+                    case 3:
+                        record = "Sports";
+                        break;
+                    case 4:
+                        record = "Photography";
+                        break;
+                }
+                if (position == 0) {
+                    Toast.makeText(getApplicationContext(), "Please select a category",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    String selected_val = mySpinner.getSelectedItem().toString();
+
+                    Toast.makeText(getApplicationContext(), selected_val,
+                            Toast.LENGTH_SHORT).show();
+                    postCateg = findViewById(R.id.spinner1);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        // <------------------------ End category drop down lost ---------------------------------->
 
 
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -87,10 +129,16 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
+    // Display function for category spinner
+    public void displayResult(View view) {
+        display_data.setText(record);
+    }
+
     private void sendPost() {
             progress.setMessage("Posting to blog...");
             final String titleText = postTitle.getText().toString().trim();
             final String descText = postDescription.getText().toString().trim();
+            final String categText = postCateg.getSelectedItem().toString().trim();
 
             if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
                 progress.show();
@@ -105,6 +153,7 @@ public class PostActivity extends AppCompatActivity {
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
+                        newPost.child("categ").setValue(categText);
 
                         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         users = FirebaseDatabase.getInstance().getReference().child("Users");
