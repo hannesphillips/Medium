@@ -51,6 +51,7 @@ public class BlogSingle extends AppCompatActivity {
     private String post_desc;
     private String post_image;
     private String post_name;
+    private String post_categ;
 
     private int flag;
     private boolean bkbut = false;
@@ -123,6 +124,7 @@ public class BlogSingle extends AppCompatActivity {
         singleTitle = findViewById(R.id.postTitle);
         singleDesc = findViewById(R.id.postDescription);
         singleName = findViewById(R.id.postUser);
+        singleCateg = findViewById(R.id.display_result);
         bookmarkButton = findViewById(R.id.bookmark);
         likeButton = findViewById(R.id.likebtn);
 
@@ -206,11 +208,12 @@ public class BlogSingle extends AppCompatActivity {
 //                String post_desc = (String) dataSnapshot.child("desc").getValue();
 //                String post_image = (String) dataSnapshot.child("image").getValue();
 //                String post_name = (String) dataSnapshot.child("name").getValue();
-                String post_categ = (String) dataSnapshot.child("categ").getValue();
+                post_categ = (String) dataSnapshot.child("categ").getValue();
 
                 singleTitle.setText(post_title);
                 singleDesc.setText(post_desc);
                 singleName.setText(post_name);
+                singleCateg.setText(post_categ);
                 Picasso.with(BlogSingle.this).load(post_image).into(singleImage);
             }
 
