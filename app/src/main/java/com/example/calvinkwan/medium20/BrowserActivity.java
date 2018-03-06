@@ -3,6 +3,7 @@ package com.example.calvinkwan.medium20;
 
 import android.app.FragmentManager;
 //import android.support.v4.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import static com.example.calvinkwan.medium20.R.id.myPostFragment;
+
 public class BrowserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -42,7 +45,13 @@ public class BrowserActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-
+        if(savedInstanceState == null)
+        {
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.content_frame, new myPostFragment());
+            transaction.commit();
+        }
 //        final Fragment frag = getSupportFragmentManager().findFragmentById(R.id.navigation_header_browser);
 //        View myView = inflater.inflate(R.layout.nav_header_browser,container, false);
 //        usersname = myView.findViewById(R.id.userName);
@@ -188,12 +197,10 @@ public class BrowserActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentManager fragmentManager = getFragmentManager();
         if (id == R.id.nav_home) {
-
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new myPostFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new myPostFragment()).commit();
         }
         else if (id == R.id.nav_myPost) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new profileFragment()).commit();
@@ -202,7 +209,8 @@ public class BrowserActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new BookmarksFragment()).commit();
         }
         else if (id == R.id.nav_notification ){
-//            fragmentManager.beginTransaction().replace(R.id.content_frame, new SecondFragment()).commit();
+            //Intent notificationsIntent = new Intent(BrowserActivity.this, Notifications.class);
+            //BrowserActivity.this.startActivity(notificationsIntent);
 //        } else if (id == R.id.nav_slideshow) {
 
 //        } else if (id == R.id.nav_manage) {
