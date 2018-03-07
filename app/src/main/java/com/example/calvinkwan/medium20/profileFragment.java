@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,11 @@ public class profileFragment extends Fragment {
     private String postKey = null;
     private String userKey = null;
     private boolean test = false;
+
+    private boolean mProcessFollow = false;
+
+    private Button followbutton;
+
     public profileFragment()
     {
 
@@ -69,6 +75,51 @@ public class profileFragment extends Fragment {
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
         userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        followbutton = myView.findViewById(R.id.followbtn);
+
+        followbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                DatabaseReference addFollower = musers.child(userkey);
+                DatabaseReference foo = addFollower.child("Followers");
+                final DatabaseReference newFollower = foo.child(userkey);
+
+                mProcessFollow = true;
+
+                foo.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(mProcessFollow)
+                        {
+                            if(dataSnapshot.hasChild(userkey)) {
+                                Toast.makeText(getActivity(), "Unfollowed", Toast.LENGTH_LONG).show();
+
+                                mProcessFollow = false;
+                            }
+
+                            else {
+                                Toast.makeText(getActivity(), "Followed", Toast.LENGTH_LONG).show();
+
+                                newFollower.child("userkey").setValue(userkey);
+
+                                mProcessFollow = false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
+
+
         return myView;
     }
     public void onStart()

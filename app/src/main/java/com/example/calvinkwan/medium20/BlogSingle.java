@@ -120,7 +120,6 @@ public class BlogSingle extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
                 final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 DatabaseReference addLike = users.child(userkey);
@@ -135,11 +134,13 @@ public class BlogSingle extends AppCompatActivity {
                         {
                             System.out.println(dataSnapshot.getKey());
                             if(dataSnapshot.hasChild(postKey)) {
+                                Toast.makeText(BlogSingle.this, "Unliked", Toast.LENGTH_LONG).show();
                                 delLike();
                                 mProcessLike = false;
                         }
 
                         else {
+                                Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
                                 newLike.child("title").setValue(post_title);
                                 newLike.child("desc").setValue(post_desc);
                                 newLike.child("postkey").setValue(postKey);
@@ -243,7 +244,7 @@ public class BlogSingle extends AppCompatActivity {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase = mDatabase.child(user_key).child("Likes");
         mDatabase.child(postKey).removeValue();
-        finish();
+        //finish();
     }
 
     @Override
