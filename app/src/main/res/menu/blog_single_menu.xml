@@ -11,4 +11,9 @@
         app:showAsAction="never"
         android:visible="false"/>
 
+    <item android:id="@+id/edit"
+        android:title="Edit"
+        app:showAsAction="never"
+        android:visible="false"/>
+
 </menu>
