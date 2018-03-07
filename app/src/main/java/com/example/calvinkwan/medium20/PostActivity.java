@@ -57,24 +57,17 @@ public class PostActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
-//        mtemp = FirebaseDatabase.getInstance().getReference().child("Users");
-        //likes = FirebaseDatabase.getInstance().getReference().child("Likes");
-//        postKey = getIntent().getExtras().getString("postID");
-
         selectImage = findViewById(R.id.likebutton);
         postTitle = findViewById(R.id.postTitle);
         postDescription = findViewById(R.id.postDescription);
 
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
-
-        // Category drop down list
         Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(PostActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Category));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
-        // End category drop down lost
 
 
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -93,24 +86,15 @@ public class PostActivity extends AppCompatActivity {
 
                            }
         });
-//        Log.d("Test", "so close");
-//        postKey = getIntent().getExtras().getString("blog_id");
-//        final DatabaseReference newtemp = mtemp.child(postKey);
 
 
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         users.child(user_key).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                        final String u  = (String) dataSnapshot.child("name").getValue();
-//                        newtemp.child("name").setValue(u);
-//            dataSnapshot.getKey();
-//            Log.d("Test", dataSnapshot.getRef().toString());
-//                                postKey = getIntent().getExtras().getString("blog_id");
-//                newtemp.child("postkey").setValue(postKey);
-//                                users.child("Posts").setValue(postKey);
-//                                users.child("Blogs").setValue(postKey);
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+
             }
 
             @Override
@@ -127,39 +111,26 @@ public class PostActivity extends AppCompatActivity {
         user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference postID = users.child(user_key);
         final DatabaseReference firststep = postID.child("PostId").push();
-//        postKey = getIntent().getExtras().getString("post_id");
-        firststep.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            if (mProcessLike) {
-                Log.d("Test", "Fk" + postKey);
-                System.out.println(dataSnapshot.getKey());
-                if (dataSnapshot.hasChild(postKey)) {
-//                        delLike();
-                    mProcessLike = false;
-                }
+        firststep.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (mProcessLike) {
+                    Log.d("Test", "Fk" + postKey);
+                    System.out.println(dataSnapshot.getKey());
+                    if (dataSnapshot.hasChild(postKey)) {
+                        mProcessLike = false;
+                    }
 
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    });
-
-////        Log.d("Test","This is the key" + key);
-////        final DatabaseReference finalID = firststep.child(key);
-//        Bundle extras = getIntent().getExtras();
-//        if(extras != null){
-//            postKey = extras.getString("blog_id");
-//            Log.d("Test","yeah" + postKey);
-//        }
-//        else
-//        {
-//            Log.d("Test","nope");// + postKey);
-//        }
+        });
 
     }
     private void sendPost() {
@@ -183,23 +154,14 @@ public class PostActivity extends AppCompatActivity {
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
 
-//                        final DatabaseReference new = here.child(postKey);
-
                         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         newPost.child("userKey").setValue(user_key);
-//                        Log.d("Test" , new)
                         users = FirebaseDatabase.getInstance().getReference().child("Users");
                         users.child(user_key).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 final String u  = (String) dataSnapshot.child("name").getValue();
                                 newPost.child("name").setValue(u);
-//                                Log.d("Test",postKey);
-//                                postKey = getIntent().getExtras().getString("blog_id");
-//                                newtemp.child("postkey").setValue(postKey);
-//                                users.child("Posts").setValue(postKey);
-//                                users.child("Blogs").setValue(postKey);
-
                             }
 
                             @Override
@@ -207,20 +169,13 @@ public class PostActivity extends AppCompatActivity {
 
                             }
                         });
-
-
                         progress.dismiss();
 //                        addPost();//get user logged in
                         DatabaseReference currentUser = users.child(user_key);
-                        //get posts
                         DatabaseReference userPosts = currentUser.child("Posts");
                         final DatabaseReference temp = userPosts.child(newPostKey);
-//                        Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
-//                        userPost.child("blog".setValue(post_title);
 
-                        //add post
-//                        userPosts.child(newPostKey);
-                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));
                     }
                 });
             }

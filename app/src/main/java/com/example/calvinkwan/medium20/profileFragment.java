@@ -38,7 +38,6 @@ public class profileFragment extends Fragment {
     View myView;
     private RecyclerView profilepostView;
     private RecyclerView.Adapter mAdapter;
-    // private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mdatabase;
     private DatabaseReference musers;
     private FirebaseAuth Auth;
@@ -70,24 +69,6 @@ public class profileFragment extends Fragment {
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
         userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        postKey =getActivity().getIntent().getExtras().getString("blog_id");
-
-//        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Users");
-//        temp = temp.child(user_key);
-//        profilePost = temp.child("personalPost");
-//        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String count = String.valueOf(dataSnapshot.getChildrenCount());
-//                // Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
         return myView;
     }
     public void onStart()
@@ -112,15 +93,12 @@ public class profileFragment extends Fragment {
 
                     viewHolder.setTitle(model.getTitle());
                     viewHolder.setDesc(model.getDesc());
-                    viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());  //passing image as string link
-                    // viewHolder.setUser(model.getUser());
+                    viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
                     viewHolder.setUser(model.getName());
 
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // startActivity(new Intent(MainActivity.this, BlogSingle.class));
-                            // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
                             Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
                             blogSingleIntent.putExtra("blog_id", post_key);
 
@@ -129,14 +107,6 @@ public class profileFragment extends Fragment {
                     });
                     test = false;
               }
-
-
-//                bookmark.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Toast.makeText(getActivity(), "Bookmarked", Toast.LENGTH_LONG).show();
-//                    }
-//                });
             }
         };
 
@@ -191,25 +161,16 @@ public class profileFragment extends Fragment {
 
     public void onResume(){
         super.onResume();
-
-        // Set title bar
         ((BrowserActivity) getActivity())
                 .setActionBarTitle("MyPosts");
-//        ((BrowserActivity) getActivity())
-//                .setActionBarTitle("Bookmarks");
 
     }
 
-//}
     private void addtopersonal()
     {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference addBookmark = musers.child(user_key);
         DatabaseReference here = addBookmark.child("Bookmarks");
-
-        // if postkey in bookmarks, unbookmark
-
-        // final DatabaseReference newBookmark = here.push();
         final DatabaseReference newBookmark = here.child(postKey);
     }
 }

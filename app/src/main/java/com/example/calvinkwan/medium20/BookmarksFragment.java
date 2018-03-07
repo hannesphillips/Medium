@@ -37,7 +37,6 @@ public class BookmarksFragment extends Fragment {
     View myView;
     private RecyclerView bookmarksView;
     private RecyclerView.Adapter mAdapter;
-    // private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mdatabase;
     private FirebaseAuth Auth;
     private DatabaseReference bookmarks;
@@ -56,11 +55,8 @@ public class BookmarksFragment extends Fragment {
         Auth = FirebaseAuth.getInstance();
 
         // Inflate the layout for this fragment
-        bookmarksView = (RecyclerView) myView.findViewById(R.id.my_recycler_view);
+        bookmarksView = myView.findViewById(R.id.my_recycler_view);
 
-        // use a linear layout manager
-        // mLayoutManager = new LinearLayoutManager(getActivity());
-        // bookmarksView.setLayoutManager(mLayoutManager);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -88,21 +84,6 @@ public class BookmarksFragment extends Fragment {
 
             }
         });
-//        mdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String count = String.valueOf(dataSnapshot.getChildrenCount());
-//                Toast.makeText(getActivity(),count,Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-        // return inflater.inflate(R.layout.fragment_bookmarks, container, false);
         return myView;
     }
 
