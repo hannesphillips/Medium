@@ -96,7 +96,7 @@ public class profileFragment extends Fragment {
                         {
                             if(dataSnapshot.hasChild(userkey)) {
                                 Toast.makeText(getActivity(), "Unfollowed", Toast.LENGTH_LONG).show();
-
+                                musers.child(userkey).child("Followers").removeValue();
                                 mProcessFollow = false;
                             }
 
