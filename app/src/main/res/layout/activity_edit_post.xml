@@ -33,7 +33,7 @@ android:layout_height="fill_parent">
         android:ems="10"
         android:padding="10dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/postUser"
+        app:layout_constraintTop_toBottomOf="@+id/postDescription"
         tools:layout_editor_absoluteX="46dp" />
 
     <TextView

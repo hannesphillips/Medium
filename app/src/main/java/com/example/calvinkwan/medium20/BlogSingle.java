@@ -272,8 +272,9 @@ public class BlogSingle extends AppCompatActivity {
             startActivity(toMain);
         }
         else if(item.getItemId() == R.id.edit) {
-        Intent editPost = new Intent(this, EditPostActivity.class);
-        startActivity(editPost);
+            Intent editPost = new Intent(BlogSingle.this, EditPostActivity.class);
+            //editPost.putExtra("blog_id", postKey);
+            startActivity(editPost);
         }
 
         return super.onOptionsItemSelected(item);
