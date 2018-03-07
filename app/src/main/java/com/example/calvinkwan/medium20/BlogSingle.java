@@ -253,10 +253,12 @@ public class BlogSingle extends AppCompatActivity {
         {
             // Add delete option
             menu.findItem(R.id.del_post).setVisible(true);
+            menu.findItem(R.id.edit).setVisible(true);
         }
         else
         {
             menu.findItem(R.id.del_post).setVisible(false);
+            menu.findItem(R.id.edit).setVisible(false);
         }
         return true;
     }
@@ -264,11 +266,14 @@ public class BlogSingle extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if(item.getItemId() == R.id.del_post)
-        {
+        if(item.getItemId() == R.id.del_post) {
             delPost();
             Intent toMain = new Intent(this, MainActivity.class);
             startActivity(toMain);
+        }
+        else if(item.getItemId() == R.id.edit) {
+        Intent editPost = new Intent(this, EditPostActivity.class);
+        startActivity(editPost);
         }
 
         return super.onOptionsItemSelected(item);
