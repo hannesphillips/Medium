@@ -311,7 +311,7 @@ public class BlogSingle extends AppCompatActivity {
         }
         else if(item.getItemId() == R.id.edit) {
             Intent editPost = new Intent(BlogSingle.this, EditPostActivity.class);
-            //editPost.putExtra("blog_id", postKey);
+            editPost.putExtra("blog_id", postKey);
             startActivity(editPost);
         }
 
