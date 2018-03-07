@@ -3,6 +3,7 @@ package com.example.calvinkwan.medium20;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity  {
+    private TextView usersLabel;
+    private TextView notificationLabel;
+    private ViewPager mMainPager;
 
     private RecyclerView blogList;
     private DatabaseReference mdatabase;
@@ -42,6 +46,11 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        usersLabel = findViewById(R.id.users);
+        notificationLabel = findViewById(R.id.notifications);
+
+
+/////Firebase Auth below
         Auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override

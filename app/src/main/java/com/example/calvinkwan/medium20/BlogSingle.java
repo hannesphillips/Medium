@@ -67,14 +67,11 @@ public class BlogSingle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog_single);
-        // setContentView(R.layout.blog_row);
-
         storage = FirebaseStorage.getInstance().getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         likes = FirebaseDatabase.getInstance().getReference().child("Likes");
         postKey = getIntent().getExtras().getString("blog_id");
-//        temp = FirebaseDatabase.getInstance().getReference().child("Users");
         temp = users.child("Posts");
         final DatabaseReference totally = temp.child(postKey);
         Log.d("Test", "this is blogsingle test 1 " + totally.toString());
@@ -86,17 +83,8 @@ public class BlogSingle extends AppCompatActivity {
                     Log.d("Test",postKey);
                     System.out.println(dataSnapshot.getKey());
                     if(dataSnapshot.hasChild(postKey)) {
-//                        delLike();
                         mProcessLike = false;
                     }
-
-//                    else {
-////                        newLike.child("title").setValue(post_title);
-////                        newLike.child("desc").setValue(post_desc);
-//                        totally.child("postkey").setValue(postKey);
-//
-//                        mProcessLike = false;
-//                    }
                 }
             }
 
@@ -132,30 +120,27 @@ public class BlogSingle extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
                 final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 DatabaseReference addLike = users.child(userkey);
                 DatabaseReference blah = addLike.child("Likes");
                 final DatabaseReference newLike = blah.child(postKey);
-               // final String x = newLike.getKey();
-
-               // Log.d("test2: ", x);
-
                 mProcessLike = true;
 
                 blah.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(mProcessLike) {
-                            //Log.d("test",postKey);
+                        if(mProcessLike)
+                        {
                             System.out.println(dataSnapshot.getKey());
                             if(dataSnapshot.hasChild(postKey)) {
+                                Toast.makeText(BlogSingle.this, "Unliked", Toast.LENGTH_LONG).show();
                                 delLike();
                                 mProcessLike = false;
                         }
 
                         else {
+                                Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
                                 newLike.child("title").setValue(post_title);
                                 newLike.child("desc").setValue(post_desc);
                                 newLike.child("postkey").setValue(postKey);
@@ -172,30 +157,12 @@ public class BlogSingle extends AppCompatActivity {
                 });
             }
         });
-
-//        mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                post_name = (String) dataSnapshot.child("name").getValue();
-//
-//                singleName.setText(post_name);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-        //FOR BOOKMARKS:
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(BlogSingle.this, "Bookmarked", Toast.LENGTH_LONG).show();
                 bookmark();
             }
         });
-        //singleCateg = findViewById(R.id.postCateg);
 
         mDatabase.child(postKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -204,10 +171,6 @@ public class BlogSingle extends AppCompatActivity {
                 post_desc = (String) dataSnapshot.child("desc").getValue();
                 post_image = (String) dataSnapshot.child("image").getValue();
                 post_name = (String) dataSnapshot.child("name").getValue();
-//                String post_title = (String) dataSnapshot.child("title").getValue();
-//                String post_desc = (String) dataSnapshot.child("desc").getValue();
-//                String post_image = (String) dataSnapshot.child("image").getValue();
-//                String post_name = (String) dataSnapshot.child("name").getValue();
                 post_categ = (String) dataSnapshot.child("categ").getValue();
 
                 singleTitle.setText(post_title);
@@ -234,10 +197,6 @@ public class BlogSingle extends AppCompatActivity {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference addBookmark = users.child(user_key);
         DatabaseReference here = addBookmark.child("Bookmarks");
-
-        // if postkey in bookmarks, unbookmark
-//        DatabaseReference idk = addBookmark.child("Posts");
-//         final DatabaseReference newIdk = idk.push();
         final DatabaseReference newBookmark = here.child(postKey);
 
         bkbut = true;
@@ -257,9 +216,6 @@ public class BlogSingle extends AppCompatActivity {
                         newBookmark.child("desc").setValue(post_desc);
                         newBookmark.child("image").setValue(post_image);
                         newBookmark.child("name").setValue(post_name);
-                        // newBookmark.child("postkey").setValue(postKey);
-
-
                         bkbut = false;
                     }
                 }
@@ -281,7 +237,6 @@ public class BlogSingle extends AppCompatActivity {
         mDatabase = mDatabase.child("Bookmarks");
         mDatabase.child(postKey).removeValue();
         finish();
-        // return;
     }
 
     void delLike() {
@@ -289,7 +244,7 @@ public class BlogSingle extends AppCompatActivity {
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase = mDatabase.child(user_key).child("Likes");
         mDatabase.child(postKey).removeValue();
-        finish();
+        //finish();
     }
 
     @Override
@@ -317,9 +272,6 @@ public class BlogSingle extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        // get name of user
-
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabase.child(user_key).addValueEventListener(new ValueEventListener() {

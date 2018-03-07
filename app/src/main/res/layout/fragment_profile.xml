@@ -119,15 +119,17 @@
                 </LinearLayout>
                 ></LinearLayout>
         </android.support.v7.widget.CardView>
+
         <Button
-            android:textColor="#09c6df"
-            android:background="@drawable/buttonstyle"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="260dp"
-            android:layout_marginRight="5dp"
+            android:id="@+id/followbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Follow Me"/>
+            android:layout_marginLeft="260dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/buttonstyle"
+            android:text="Follow Me"
+            android:textColor="#09c6df" />
 
     </RelativeLayout>
     <FrameLayout
