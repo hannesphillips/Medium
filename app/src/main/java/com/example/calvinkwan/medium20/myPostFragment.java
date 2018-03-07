@@ -147,11 +147,11 @@ public class myPostFragment extends Fragment {
             postUser.setText(user);
         }
 
-//        private  void setCateg(String user)
-//        {
-//            Spinner postCateg = mView.findViewById(R.id.spinner1);
-//            postCateg.getSelectedItem();
-//        }
+        private  void setCateg(String user)
+        {
+            Spinner postCateg = mView.findViewById(R.id.spinner1);
+            postCateg.getSelectedItem();
+        }
 
     }
 

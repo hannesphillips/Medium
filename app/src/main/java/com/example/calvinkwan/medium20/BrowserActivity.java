@@ -200,6 +200,8 @@ public class BrowserActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_bookmark) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new BookmarksFragment()).commit();
+        }else if (id == R.id.nav_categories) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new categoriesFragment()).commit();
         }
         else if (id == R.id.nav_notification ){
 //            fragmentManager.beginTransaction().replace(R.id.content_frame, new SecondFragment()).commit();

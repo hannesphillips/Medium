@@ -34,7 +34,7 @@ public class PostActivity extends AppCompatActivity {
     private EditText postTitle;
     private EditText postDescription;
     private EditText postName;
-    private AdapterView.OnItemSelectedListener postCateg;
+    private Spinner postCateg;
 
     private Button submitButton;
     private StorageReference storage;
@@ -64,17 +64,19 @@ public class PostActivity extends AppCompatActivity {
         selectImage = findViewById(R.id.likebutton);
         postTitle = findViewById(R.id.postTitle);
         postDescription = findViewById(R.id.postDescription);
+        postCateg = findViewById(R.id.spinner1);//
+
 
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
 
-        // Category drop down list
+        // <----------------------- Category drop down list --------------------------------------->
         Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(PostActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Category));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
-        // End category drop down lost
+        // <----------------------- End category drop down list ----------------------------------->
 
 
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +168,7 @@ public class PostActivity extends AppCompatActivity {
             progress.setMessage("Posting to blog...");
             final String titleText = postTitle.getText().toString().trim();
             final String descText = postDescription.getText().toString().trim();
+            final String categText = postCateg.getSelectedItem().toString().trim();
 
             if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
                 progress.show();
@@ -182,6 +185,7 @@ public class PostActivity extends AppCompatActivity {
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
                         newPost.child("image").setValue(downloadUri.toString());
+                        newPost.child("categ").setValue(categText);
 
 //                        final DatabaseReference new = here.child(postKey);
 
