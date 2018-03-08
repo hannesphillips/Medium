@@ -44,6 +44,7 @@ public class BlogSingle extends AppCompatActivity {
 
     private ImageButton bookmarkButton;
     private ImageButton likeButton;
+    private ImageButton addComment;
 
     private Uri imageUri = null;
 
@@ -115,6 +116,7 @@ public class BlogSingle extends AppCompatActivity {
         singleCateg = findViewById(R.id.display_result);
         bookmarkButton = findViewById(R.id.bookmark);
         likeButton = findViewById(R.id.likebtn);
+        addComment = findViewById(R.id.addComment);
 
         //FOR LIKES:::
         likeButton.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +163,13 @@ public class BlogSingle extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bookmark();
+            }
+        });
+
+        addComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addComment();
             }
         });
 
@@ -324,6 +333,13 @@ public class BlogSingle extends AppCompatActivity {
         if (postKey != null) mDatabase.child(postKey).removeValue();
 
         return;
+    }
+
+    void addComment() {
+        Toast.makeText(BlogSingle.this, "Comment", Toast.LENGTH_LONG).show();
+        Intent toComment = new Intent(this, CommentActivity.class);
+        toComment.putExtra("blog_id", postKey);
+        startActivity(toComment);
     }
 
 }
