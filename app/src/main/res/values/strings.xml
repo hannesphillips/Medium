@@ -12,7 +12,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="cancel">Cancel</string>
-    <string name="edit_post">Edit</string>
+    <string name="edit_post">Done</string>
 
     // Category drop down items
     <string-array name="Category">
