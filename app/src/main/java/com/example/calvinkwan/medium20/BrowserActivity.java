@@ -173,10 +173,6 @@ public class BrowserActivity extends AppCompatActivity
         }else if (id == R.id.nav_categories) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new categoriesFragment()).commit();
         }
-        else if (id == R.id.nav_notification ){
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new NotificationsFragment()).commit();
-
-        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
