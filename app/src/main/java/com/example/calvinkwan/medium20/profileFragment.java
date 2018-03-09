@@ -79,7 +79,7 @@ public class profileFragment extends Fragment {
         followbutton = myView.findViewById(R.id.followbtn);
 
 //        if(musers.child(userKey) != null) {
-//              followbutton.setVisibility(followbutton.GONE);
+//            followbutton.setVisibility(followbutton.GONE);
 //        }
 
         followbutton.setOnClickListener(new View.OnClickListener() {
