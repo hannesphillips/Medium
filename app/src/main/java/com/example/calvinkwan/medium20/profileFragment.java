@@ -78,6 +78,10 @@ public class profileFragment extends Fragment {
 
         followbutton = myView.findViewById(R.id.followbtn);
 
+//        if(musers.child(userKey) != null) {
+//              followbutton.setVisibility(followbutton.GONE);
+//        }
+
         followbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +99,7 @@ public class profileFragment extends Fragment {
                         if(mProcessFollow)
                         {
                             if(dataSnapshot.hasChild(userkey)) {
+                                //Log.d("datasnapshot: ", userkey);
                                 Toast.makeText(getActivity(), "Unfollowed", Toast.LENGTH_LONG).show();
                                 musers.child(userkey).child("Followers").removeValue();
                                 mProcessFollow = false;
@@ -102,7 +107,6 @@ public class profileFragment extends Fragment {
 
                             else {
                                 Toast.makeText(getActivity(), "Followed", Toast.LENGTH_LONG).show();
-
                                 newFollower.child("userkey").setValue(userkey);
 
                                 mProcessFollow = false;
