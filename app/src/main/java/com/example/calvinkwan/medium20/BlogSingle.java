@@ -1,18 +1,24 @@
 package com.example.calvinkwan.medium20;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +40,7 @@ public class BlogSingle extends AppCompatActivity {
     private DatabaseReference users;
     private DatabaseReference likes;
     private DatabaseReference temp;
-
+    private DatabaseReference commentDatabase;
 
     private ImageView singleImage;
     private TextView singleTitle;
@@ -44,6 +50,7 @@ public class BlogSingle extends AppCompatActivity {
 
     private ImageButton bookmarkButton;
     private ImageButton likeButton;
+    private ImageButton addComment;
 
     private Uri imageUri = null;
 
@@ -56,12 +63,15 @@ public class BlogSingle extends AppCompatActivity {
     private int flag;
     private boolean bkbut = false;
 
-    private String bPostKey;
+    private RecyclerView comments;
 
     boolean mProcessLike = false;
 
     String curr_user = "";
     String poster = "";
+
+    private FirebaseAuth Auth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +125,21 @@ public class BlogSingle extends AppCompatActivity {
         singleCateg = findViewById(R.id.display_result);
         bookmarkButton = findViewById(R.id.bookmark);
         likeButton = findViewById(R.id.likebtn);
+        addComment = findViewById(R.id.addComment);
+
+        comments = findViewById(R.id.my_post_recycler);
+        comments.setHasFixedSize(true);
+        comments.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        comments.setLayoutManager(layoutManager);
+        comments.setNestedScrollingEnabled(false);
+
+        commentDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
+        commentDatabase = commentDatabase.child(postKey);
+        commentDatabase = commentDatabase.child("Comments");
+        Auth = FirebaseAuth.getInstance();
 
         //FOR LIKES:::
         likeButton.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +186,13 @@ public class BlogSingle extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bookmark();
+            }
+        });
+
+        addComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addComment();
             }
         });
 
@@ -325,5 +357,13 @@ public class BlogSingle extends AppCompatActivity {
 
         return;
     }
+
+    void addComment() {
+        Toast.makeText(BlogSingle.this, "Comment", Toast.LENGTH_LONG).show();
+        Intent toComment = new Intent(this, ViewComments.class);
+        toComment.putExtra("blog_id", postKey);
+        startActivity(toComment);
+    }
+
 
 }

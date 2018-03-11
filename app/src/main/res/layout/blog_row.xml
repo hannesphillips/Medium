@@ -41,6 +41,9 @@
 
         <TextView
             android:id="@+id/postDesc"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines = "1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
