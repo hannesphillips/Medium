@@ -35,7 +35,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.ValueEventListener;
-import com.firebase.ui.auth.AuthUI;
 
 import org.w3c.dom.Text;
 
@@ -193,6 +192,10 @@ public class LoginActivity extends AppCompatActivity
                     }
                 }
             });
+        }
+        else
+        {
+            Toast.makeText(LoginActivity.this, "Please fill in a email and a password", Toast.LENGTH_LONG).show();
         }
     }
 
