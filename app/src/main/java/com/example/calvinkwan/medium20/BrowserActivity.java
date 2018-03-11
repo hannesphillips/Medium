@@ -138,6 +138,11 @@ public class BrowserActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.actionMessage)
+        {
+            startActivity(new Intent(BrowserActivity.this, MessageActivity.class));
+        }
+
         if(item.getItemId() == R.id.action_add)
         {
             startActivity(new Intent(BrowserActivity.this, PostActivity.class));
