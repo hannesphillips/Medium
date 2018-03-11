@@ -47,8 +47,8 @@ public class ViewComments extends AppCompatActivity {
         comments.setHasFixedSize(true);
         comments.setLayoutManager(new LinearLayoutManager(this));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        // layoutManager.setReverseLayout(true);
+        // layoutManager.setStackFromEnd(true);
         comments.setLayoutManager(layoutManager);
 
         enterComment = findViewById(R.id.enterComment);
