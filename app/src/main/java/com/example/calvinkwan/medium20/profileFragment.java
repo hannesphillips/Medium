@@ -43,6 +43,7 @@ public class profileFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private DatabaseReference mdatabase;
     private DatabaseReference musers;
+    private DatabaseReference musers2;
     private FirebaseAuth Auth;
     private DatabaseReference profilePost;
     private String postKey = null;
@@ -51,6 +52,8 @@ public class profileFragment extends Fragment {
     private String passedKey = null;
 
     private TextView postNum;
+    private TextView followNum;
+    private TextView followerNum;
 
     private boolean mProcessFollow = false;
 
@@ -92,7 +95,11 @@ public class profileFragment extends Fragment {
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
 
         postNum =(TextView) myView.findViewById(R.id.postNumber);
+        followNum =(TextView) myView.findViewById(R.id.followingNumber);
+        followerNum =(TextView) myView.findViewById(R.id.followersNumber);
 
+        musers2 = FirebaseDatabase.getInstance().getReference().child("Users");
+        musers2 = musers2.child(userKey);
         musers = musers.child(userKey);
         musers = musers.child("Personal Posts");
         musers.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -120,7 +127,7 @@ public class profileFragment extends Fragment {
             public void onClick(View v) {
                 final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                DatabaseReference addFollower = musers.child(userkey);
+                DatabaseReference addFollower = musers2.child(userkey);
                 DatabaseReference foo = addFollower.child("Followers");
                 final DatabaseReference newFollower = foo.child(userkey);
 
@@ -134,8 +141,11 @@ public class profileFragment extends Fragment {
                             if(dataSnapshot.hasChild(userkey)) {
                                 //Log.d("datasnapshot: ", userkey);
                                 Toast.makeText(getActivity(), "Unfollowed", Toast.LENGTH_LONG).show();
-                                musers.child(userkey).child("Followers").removeValue();
+                                musers2.child(userkey).child("Followers").removeValue();
                                 mProcessFollow = false;
+//                               followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+//                               Todo fix the datasnahpshot variable for follower
+//                               followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
                             }
 
                             else {
@@ -143,8 +153,12 @@ public class profileFragment extends Fragment {
                                 newFollower.child("userkey").setValue(userkey);
 
                                 mProcessFollow = false;
+//                                followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+//                                //Todo fix the datasnahpshot variable for follower
+//                                followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
                             }
-                        }
+                        } followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                        followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
                     }
 
                     @Override
