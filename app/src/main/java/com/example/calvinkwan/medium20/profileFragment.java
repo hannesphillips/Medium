@@ -65,8 +65,8 @@ public class profileFragment extends Fragment {
 
         profilepostView = (RecyclerView) myView.findViewById(R.id.my_post_recycler);
 
-        profilepostView.setHasFixedSize(true);
-        profilepostView.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
+//        profilepostView.setHasFixedSize(true);
+//        profilepostView.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -74,8 +74,11 @@ public class profileFragment extends Fragment {
 
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+
+        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        musers = musers.child(userKey);
+        musers = musers.child("Personal Posts");
         followbutton = myView.findViewById(R.id.followbtn);
 
 //        if(musers.child(userKey) != null) {
@@ -134,34 +137,26 @@ public class profileFragment extends Fragment {
                 Blog.class,
                 R.layout.blog_row,
                 BlogViewHolder.class,
-                mdatabase
+                musers
         )
         {
 
             @Override
-            protected void populateViewHolder(final profileFragment.BlogViewHolder viewHolder, Blog model, int position) {
+            protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position) {
                 final String post_key = getRef(position).getKey();
-                test = (viewHolder.sameUserKey(post_key));
-                Log.d("Test" , "Fkkk it worked" + test);
-                if (test)
-                {
-
-                    viewHolder.setTitle(model.getTitle());
-                    viewHolder.setDesc(model.getDesc());
-                    viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
-                    viewHolder.setUser(model.getName());
-
-                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
-                            blogSingleIntent.putExtra("blog_id", post_key);
-
-                            startActivity(blogSingleIntent);
-                        }
-                    });
-                    test = false;
-              }
+                viewHolder.setTitle(model.getTitle());
+                viewHolder.setUser(model.getName());
+                viewHolder.setDesc(model.getDesc());
+                viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
+                        blogSingleIntent.putExtra("blog_id", post_key);
+                        blogSingleIntent.putExtra("flag", 1);
+                        startActivity(blogSingleIntent);
+                    }
+                });
             }
         };
 

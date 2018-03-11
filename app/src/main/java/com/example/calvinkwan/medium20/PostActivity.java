@@ -53,6 +53,7 @@ public class PostActivity extends AppCompatActivity {
     private DatabaseReference Food;
     private DatabaseReference Sports;
     private DatabaseReference Photography;
+    private DatabaseReference Posts;
 
     private static final int GALLERY_REQUEST = 1;
 
@@ -63,11 +64,18 @@ public class PostActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
+
+        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        users = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
         // test category
         Art = FirebaseDatabase.getInstance().getReference().child("Art");
         Food = FirebaseDatabase.getInstance().getReference().child("Food");
         Sports = FirebaseDatabase.getInstance().getReference().child("Sports");
         Photography = FirebaseDatabase.getInstance().getReference().child("Photography");
+        Posts = FirebaseDatabase.getInstance().getReference().child("Users");
+        Posts = Posts.child(user_key).child("Personal Posts");
 
 
         selectImage = findViewById(R.id.likebutton);
@@ -147,8 +155,7 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
-        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        users = FirebaseDatabase.getInstance().getReference().child("Users");
+
         users.child(user_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {}
@@ -202,7 +209,16 @@ public class PostActivity extends AppCompatActivity {
                         final DatabaseReference newPost = database.push();
                         // test categ
                         final DatabaseReference newArt = Art.push();
+                        final DatabaseReference newPersonal = Posts.push();
+                        // test personal Post
+                        String newPersonKey = newPersonal.getKey(); // tests with newArtKey = newPost.getKey()
+                        newPersonal.child("title").setValue(titleText);
+                        newPersonal.child("desc").setValue(descText);
+                        newPersonal.child("image").setValue(downloadUri.toString());
+                        newPersonal.child("categ").setValue(categText);
 
+//                        newPersonal.child("userKey").setValue(user_key)
+//                        newPersonal
                         String newPostKey = newPost.getKey();
                         newPost.child("title").setValue(titleText);
                         newPost.child("desc").setValue(descText);
@@ -232,6 +248,7 @@ public class PostActivity extends AppCompatActivity {
 
                                 // test categ
                                 newArt.child("name").setValue(u);
+                                newPersonal.child("name").setValue(u);
                             }
 
                             @Override
@@ -269,6 +286,13 @@ public class PostActivity extends AppCompatActivity {
                     final DatabaseReference newPost = database.push();
                     // test categ
                     final DatabaseReference newFood = Food.push();
+                    final DatabaseReference newPersonal = Posts.push();
+                    // test personal Post
+                    String newPersonKey = newPersonal.getKey(); // tests with newArtKey = newPost.getKey()
+                    newPersonal.child("title").setValue(titleText);
+                    newPersonal.child("desc").setValue(descText);
+                    newPersonal.child("image").setValue(downloadUri.toString());
+                    newPersonal.child("categ").setValue(categText);
 
                     String newPostKey = newPost.getKey();
                     newPost.child("title").setValue(titleText);
@@ -299,6 +323,7 @@ public class PostActivity extends AppCompatActivity {
 
                             // test categ
                             newFood.child("name").setValue(u);
+                            newPersonal.child("name").setValue(u);
                         }
 
                         @Override
@@ -337,6 +362,14 @@ public class PostActivity extends AppCompatActivity {
                     // test categ
                     final DatabaseReference newSports = Sports.push();
 
+                    final DatabaseReference newPersonal = Posts.push();
+                    // test personal Post
+                    String newPersonKey = newPersonal.getKey(); // tests with newArtKey = newPost.getKey()
+                    newPersonal.child("title").setValue(titleText);
+                    newPersonal.child("desc").setValue(descText);
+                    newPersonal.child("image").setValue(downloadUri.toString());
+                    newPersonal.child("categ").setValue(categText);
+
                     String newPostKey = newPost.getKey();
                     newPost.child("title").setValue(titleText);
                     newPost.child("desc").setValue(descText);
@@ -366,6 +399,7 @@ public class PostActivity extends AppCompatActivity {
 
                             // test categ
                             newSports.child("name").setValue(u);
+                            newPersonal.child("name").setValue(u);
                         }
 
                         @Override
@@ -404,6 +438,14 @@ public class PostActivity extends AppCompatActivity {
                     // test categ
                     final DatabaseReference newPhotography = Photography.push();
 
+                    final DatabaseReference newPersonal = Posts.push();
+                    // test personal Post
+                    String newPersonKey = newPersonal.getKey(); // tests with newArtKey = newPost.getKey()
+                    newPersonal.child("title").setValue(titleText);
+                    newPersonal.child("desc").setValue(descText);
+                    newPersonal.child("image").setValue(downloadUri.toString());
+                    newPersonal.child("categ").setValue(categText);
+
                     String newPostKey = newPost.getKey();
                     newPost.child("title").setValue(titleText);
                     newPost.child("desc").setValue(descText);
@@ -433,6 +475,7 @@ public class PostActivity extends AppCompatActivity {
 
                             // test categ
                             newPhotography.child("name").setValue(u);
+                            newPersonal.child("name").setValue(u);
                         }
 
                         @Override
