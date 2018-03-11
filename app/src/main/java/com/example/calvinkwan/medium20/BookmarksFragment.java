@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -186,8 +188,7 @@ public class BookmarksFragment extends Fragment {
         // Set title bar
         ((BrowserActivity) getActivity())
                 .setActionBarTitle("Bookmarks");
-//        ((BrowserActivity) getActivity())
-//                .setActionBarTitle("Bookmarks");
+
 
     }
 

@@ -3,6 +3,7 @@ package com.example.calvinkwan.medium20;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -48,6 +49,11 @@ public class PostActivity extends AppCompatActivity {
     private String key = null;
     private Uri imageUri = null;
 
+    private DatabaseReference Art;
+    private DatabaseReference Food;
+    private DatabaseReference Sports;
+    private DatabaseReference Photography;
+
     private static final int GALLERY_REQUEST = 1;
 
     @Override
@@ -57,24 +63,71 @@ public class PostActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance().getReference().child("Blog");
+        // test category
+        Art = FirebaseDatabase.getInstance().getReference().child("Art");
+        Food = FirebaseDatabase.getInstance().getReference().child("Food");
+        Sports = FirebaseDatabase.getInstance().getReference().child("Sports");
+        Photography = FirebaseDatabase.getInstance().getReference().child("Photography");
+
 
         selectImage = findViewById(R.id.likebutton);
         postTitle = findViewById(R.id.postTitle);
         postDescription = findViewById(R.id.postDescription);
-        postCateg = findViewById(R.id.spinner1);//
+        postCateg = findViewById(R.id.spinner1);
 
 
         submitButton = findViewById(R.id.submitPost);
         progress = new ProgressDialog(this);
 
         // <----------------------- Category drop down list --------------------------------------->
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+        final Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(PostActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Category));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
         // <----------------------- End category drop down list ----------------------------------->
 
+        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position) {
+                    case 0:
+                        submitButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sendPostArt();
+                            }
+                        });
+                        break;
+                    case 1:
+                        submitButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sendPostFood();
+                            }
+                        });
+                        break;
+                    case 2:
+                        submitButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sendPostSports();
+                            }
+                        });
+                        break;
+                    case 3:
+                        submitButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sendPostPhotography();
+                            }
+                        });
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +141,9 @@ public class PostActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendPost();
 
             }
+
         });
 
 
@@ -98,50 +151,107 @@ public class PostActivity extends AppCompatActivity {
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         users.child(user_key).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-            }
-
+            public void onDataChange(DataSnapshot dataSnapshot) {}
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
     }
-
     boolean mProcessLike = false;
-
-    private void addPost() {
-
+    private void addPost()
+    {
         user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference postID = users.child(user_key);
         final DatabaseReference firststep = postID.child("PostId").push();
 //        postKey = getIntent().getExtras().getString("post_id");
         firststep.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (mProcessLike) {
-                    Log.d("Test", "Fk" + postKey);
-                    System.out.println(dataSnapshot.getKey());
-                    if (dataSnapshot.hasChild(postKey)) {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (mProcessLike) {
+                Log.d("Test", "Fk" + postKey);
+                System.out.println(dataSnapshot.getKey());
+                if (dataSnapshot.hasChild(postKey)) {
 //                        delLike();
-                        mProcessLike = false;
-                    }
-
-
+                    mProcessLike = false;
                 }
             }
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+        }
+    });
 
     }
+    private void sendPostArt() {
+            progress.setMessage("Posting to blog...");
+            final String titleText = postTitle.getText().toString().trim();
+            final String descText = postDescription.getText().toString().trim();
+            final String categText = postCateg.getSelectedItem().toString().trim();
 
-    private void sendPost() {
+            if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+                progress.show();
+                StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
+                filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                    {
+                        Uri downloadUri = taskSnapshot.getDownloadUrl();
+                        final DatabaseReference newPost = database.push();
+                        // test categ
+                        final DatabaseReference newArt = Art.push();
+
+                        String newPostKey = newPost.getKey();
+                        newPost.child("title").setValue(titleText);
+                        newPost.child("desc").setValue(descText);
+                        newPost.child("image").setValue(downloadUri.toString());
+                        newPost.child("categ").setValue(categText);
+
+                        // test categ
+                        String newArtKey = newArt.getKey(); // tests with newArtKey = newPost.getKey()
+                        newArt.child("title").setValue(titleText);
+                        newArt.child("desc").setValue(descText);
+                        newArt.child("image").setValue(downloadUri.toString());
+                        newArt.child("categ").setValue(categText);
+
+//                        final DatabaseReference new = here.child(postKey);
+
+                        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        newPost.child("userKey").setValue(user_key);
+
+                        newArt.child("userKey").setValue(user_key);
+
+                        users = FirebaseDatabase.getInstance().getReference().child("Users");
+                        users.child(user_key).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                final String u  = (String) dataSnapshot.child("name").getValue();
+                                newPost.child("name").setValue(u);
+
+                                // test categ
+                                newArt.child("name").setValue(u);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                        progress.dismiss();
+                        DatabaseReference currentUser = users.child(user_key);
+
+                        DatabaseReference userPosts = currentUser.child("Posts");
+                        final DatabaseReference temp = userPosts.child(newPostKey);
+
+                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                    }
+                });
+            }
+    }
+
+    private void sendPostFood() {
         progress.setMessage("Posting to blog...");
         final String titleText = postTitle.getText().toString().trim();
         final String descText = postDescription.getText().toString().trim();
@@ -150,11 +260,15 @@ public class PostActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
             progress.show();
             StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
-            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+            {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                {
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
                     final DatabaseReference newPost = database.push();
+                    // test categ
+                    final DatabaseReference newFood = Food.push();
 
                     String newPostKey = newPost.getKey();
                     newPost.child("title").setValue(titleText);
@@ -162,17 +276,29 @@ public class PostActivity extends AppCompatActivity {
                     newPost.child("image").setValue(downloadUri.toString());
                     newPost.child("categ").setValue(categText);
 
+                    // test categ
+                    String newFoodKey = newFood.getKey(); // tests with newArtKey = newPost.getKey()
+                    newFood.child("title").setValue(titleText);
+                    newFood.child("desc").setValue(descText);
+                    newFood.child("image").setValue(downloadUri.toString());
+                    newFood.child("categ").setValue(categText);
+
 //                        final DatabaseReference new = here.child(postKey);
 
                     String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     newPost.child("userKey").setValue(user_key);
+
+                    newFood.child("userKey").setValue(user_key);
+
                     users = FirebaseDatabase.getInstance().getReference().child("Users");
                     users.child(user_key).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            final String u = (String) dataSnapshot.child("name").getValue();
+                            final String u  = (String) dataSnapshot.child("name").getValue();
                             newPost.child("name").setValue(u);
 
+                            // test categ
+                            newFood.child("name").setValue(u);
                         }
 
                         @Override
@@ -180,8 +306,140 @@ public class PostActivity extends AppCompatActivity {
 
                         }
                     });
+                    progress.dismiss();
+                    DatabaseReference currentUser = users.child(user_key);
 
+                    DatabaseReference userPosts = currentUser.child("Posts");
+                    final DatabaseReference temp = userPosts.child(newPostKey);
 
+                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                }
+            });
+        }
+    }
+
+    private void sendPostSports() {
+        progress.setMessage("Posting to blog...");
+        final String titleText = postTitle.getText().toString().trim();
+        final String descText = postDescription.getText().toString().trim();
+        final String categText = postCateg.getSelectedItem().toString().trim();
+
+        if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+            progress.show();
+            StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
+            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+            {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                {
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    final DatabaseReference newPost = database.push();
+                    // test categ
+                    final DatabaseReference newSports = Sports.push();
+
+                    String newPostKey = newPost.getKey();
+                    newPost.child("title").setValue(titleText);
+                    newPost.child("desc").setValue(descText);
+                    newPost.child("image").setValue(downloadUri.toString());
+                    newPost.child("categ").setValue(categText);
+
+                    // test categ
+                    String newSportsKey = newSports.getKey(); // tests with newArtKey = newPost.getKey()
+                    newSports.child("title").setValue(titleText);
+                    newSports.child("desc").setValue(descText);
+                    newSports.child("image").setValue(downloadUri.toString());
+                    newSports.child("categ").setValue(categText);
+
+//                        final DatabaseReference new = here.child(postKey);
+
+                    String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    newPost.child("userKey").setValue(user_key);
+
+                    newSports.child("userKey").setValue(user_key);
+
+                    users = FirebaseDatabase.getInstance().getReference().child("Users");
+                    users.child(user_key).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final String u  = (String) dataSnapshot.child("name").getValue();
+                            newPost.child("name").setValue(u);
+
+                            // test categ
+                            newSports.child("name").setValue(u);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    progress.dismiss();
+                    DatabaseReference currentUser = users.child(user_key);
+
+                    DatabaseReference userPosts = currentUser.child("Posts");
+                    final DatabaseReference temp = userPosts.child(newPostKey);
+
+                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                }
+            });
+        }
+    }
+
+    private void sendPostPhotography() {
+        progress.setMessage("Posting to blog...");
+        final String titleText = postTitle.getText().toString().trim();
+        final String descText = postDescription.getText().toString().trim();
+        final String categText = postCateg.getSelectedItem().toString().trim();
+
+        if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+            progress.show();
+            StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
+            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+            {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                {
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    final DatabaseReference newPost = database.push();
+                    // test categ
+                    final DatabaseReference newPhotography = Photography.push();
+
+                    String newPostKey = newPost.getKey();
+                    newPost.child("title").setValue(titleText);
+                    newPost.child("desc").setValue(descText);
+                    newPost.child("image").setValue(downloadUri.toString());
+                    newPost.child("categ").setValue(categText);
+
+                    // test categ
+                    String newPhotographyKey = newPhotography.getKey(); // tests with newArtKey = newPost.getKey()
+                    newPhotography.child("title").setValue(titleText);
+                    newPhotography.child("desc").setValue(descText);
+                    newPhotography.child("image").setValue(downloadUri.toString());
+                    newPhotography.child("categ").setValue(categText);
+
+//                        final DatabaseReference new = here.child(postKey);
+
+                    String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    newPost.child("userKey").setValue(user_key);
+
+                    newPhotography.child("userKey").setValue(user_key);
+
+                    users = FirebaseDatabase.getInstance().getReference().child("Users");
+                    users.child(user_key).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final String u  = (String) dataSnapshot.child("name").getValue();
+                            newPost.child("name").setValue(u);
+
+                            // test categ
+                            newPhotography.child("name").setValue(u);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     progress.dismiss();
                     DatabaseReference currentUser = users.child(user_key);
 
@@ -195,13 +453,13 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            imageUri = data.getData();
-            selectImage.setImageURI(imageUri);
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+                imageUri = data.getData();
+                selectImage.setImageURI(imageUri);
+            }
         }
     }
-}
 

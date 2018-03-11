@@ -83,6 +83,7 @@ public class BlogSingle extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         likes = FirebaseDatabase.getInstance().getReference().child("Likes");
+
         postKey = getIntent().getExtras().getString("blog_id");
         temp = users.child("Posts");
         final DatabaseReference totally = temp.child(postKey);
