@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
@@ -56,7 +58,8 @@ public class MessageActivity extends AppCompatActivity {
    {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_message);
-
+        final String tempUserID =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("Message", "This shoukd be user key " + tempUserID);
        activity_main = findViewById(R.id.messageActivity);
        fab = findViewById(R.id.fab);
        fab.setOnClickListener(new View.OnClickListener()
@@ -65,7 +68,7 @@ public class MessageActivity extends AppCompatActivity {
            public void onClick(View v)
            {
                 EditText input = findViewById(R.id.input);
-                FirebaseDatabase.getInstance().getReference().push().setValue(new publicMessageChat(input.getText().toString(),
+                FirebaseDatabase.getInstance().getReference().push().setValue(new publicMessageChat(tempUserID,input.getText().toString(),
                         FirebaseAuth.getInstance().getCurrentUser().getEmail()));
                 input.setText("");
            }
@@ -97,13 +100,26 @@ public class MessageActivity extends AppCompatActivity {
                 messageText = v.findViewById(R.id.message_text);
                 messageUser = v.findViewById(R.id.message_user);
                 messageTime = v.findViewById(R.id.message_time);
+                final String messageID = getRef(position).getKey();
+                //condition outputs - if user has child name userKey, say yes
+                DatabaseReference temp = getRef(position);
+                temp = temp.child("left");
+                final String tempID  = temp.getKey();
+//                if()
+                Log.d("Message"," Yes " + temp + " this is user " + model.getMessageId());
 
+//                if( FirebaseAuth.getInstance().getCurrentUser().getUid().equals(messageID))
+//                {
+//                    Log.d("Message"," Yes right side");
+//                }
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
             }
         };
+//        final ListView lv  (ListView) findView
         listOfMessages.setAdapter(adapter);
+//        listOfMessages.
    }
 }
 

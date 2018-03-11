@@ -171,7 +171,9 @@ public class BrowserActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new myPostFragment()).commit();
         }
         else if (id == R.id.nav_myPost) {
-
+            profileFragment idf = new profileFragment();
+//            Bundle args = new Bundle();
+//            args.putString("passKey", )
             fragmentManager.beginTransaction().replace(R.id.content_frame, new profileFragment()).commit();
         }
         else if (id == R.id.nav_bookmark) {

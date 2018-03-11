@@ -104,6 +104,7 @@ public class myPostFragment extends Fragment {
                         // Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_LONG).show();
                         Intent blogSingleIntent = new Intent(getActivity(), BlogSingle.class);
                         blogSingleIntent.putExtra("blog_id", post_key);
+//                        blogSingleIntent.putExtra("passKey", );
                         startActivity(blogSingleIntent);
                     }
                 });
@@ -160,6 +161,7 @@ public class myPostFragment extends Fragment {
             Spinner postCateg = mView.findViewById(R.id.spinner1);
             postCateg.getSelectedItem();
         }
+
 
     }
 

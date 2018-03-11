@@ -1,8 +1,11 @@
 package com.example.calvinkwan.medium20;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +53,7 @@ public class BlogSingle extends AppCompatActivity {
     private TextView singleName;
     private TextView singleCateg;
 
+    private ImageButton pass_Key;
     private ImageButton bookmarkButton;
     private ImageButton likeButton;
     private ImageButton addComment;
@@ -131,6 +135,7 @@ public class BlogSingle extends AppCompatActivity {
         bookmarkButton = findViewById(R.id.bookmark);
         likeButton = findViewById(R.id.likebtn);
         addComment = findViewById(R.id.addComment);
+        pass_Key = findViewById(R.id.userPage);
 
 //        comments = findViewById(R.id.my_post_recycler);
 //        comments.setHasFixedSize(true);
@@ -197,7 +202,7 @@ public class BlogSingle extends AppCompatActivity {
                                 newLike.child("desc").setValue(post_desc);
                                 newLike.child("postkey").setValue(postKey);
                                 likeButton.setImageResource(R.drawable.whitethumb);
-
+//                                pass_Key.setImage
                                 mProcessLike = false;
                             }
                         }
@@ -218,6 +223,48 @@ public class BlogSingle extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bookmark();
+            }
+        });
+
+        String temp;
+
+        pass_Key.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                profileFragment fr = new profileFragment();
+
+                DatabaseReference getcode = FirebaseDatabase.getInstance().getReference().child("Blog").child(postKey);
+//                DatabaseReference tunnel = getcode.child("userKey");
+                getcode.child("userKey").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        final String userkey = snapshot.getValue().toString();  //prints "Do you have data? You'll love Firebase."
+//                        temp = userkey;
+                        Bundle args = new Bundle();
+                       args.putString("profileKey", userkey);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction ft = fragmentManager.beginTransaction();
+                        profileFragment fr = new profileFragment();
+                        Log.d("userPage",  "User Key " +  args);
+                        fr.setArguments(args);
+//                        fragmentManager.beginTransaction().replace(R.id.content_frame, fr).commit();
+//                       ft.replace(R.id., new profileFragment()).commit();
+                       //Todo this is causing  a error see what they mean
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+//                final String userkey =getcode.getKey();
+
+//                Log.d("userPage",  "User Key " +  getcode.getKey());
+
+//
+//                fragmentManager.putExtra("user_id", );
+//                fragmentManager.pu
+//                startActivity(toComment);
             }
         });
 

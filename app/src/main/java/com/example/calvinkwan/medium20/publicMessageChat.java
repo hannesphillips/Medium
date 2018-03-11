@@ -8,9 +8,12 @@ public class publicMessageChat {
     private String messageUser;
     private long messageTime;
 
-    public publicMessageChat(String messageText, String messageUser) {
+    public String left;
+
+    public publicMessageChat(String left, String messageText, String messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
+        this.left = left;
 
         messageTime = new Date().getTime();
     }
@@ -18,6 +21,13 @@ public class publicMessageChat {
     public publicMessageChat() {
     }
 
+//    public publicMessageChat(boolean left, String message)
+//    {
+//        super();
+//        this.left = left;
+//        this.messageText = message;
+//
+//    }
     public String getMessageText() {
         return messageText;
     }
@@ -28,6 +38,9 @@ public class publicMessageChat {
 
     public String getMessageUser() {
         return messageUser;
+    }
+    public String getMessageId() {
+        return left;
     }
 
     public void setMessageUser(String messageUser) {

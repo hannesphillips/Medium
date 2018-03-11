@@ -45,6 +45,7 @@ public class EditPostActivity extends AppCompatActivity {
     private String post_title;
     private String post_desc;
     private String post_image;
+    private String userKey;
 
     private boolean valid;
 
@@ -70,7 +71,7 @@ public class EditPostActivity extends AppCompatActivity {
                 post_title = (String) dataSnapshot.child("title").getValue();
                 post_desc = (String) dataSnapshot.child("desc").getValue();
                 post_image = (String) dataSnapshot.child("image").getValue();
-
+                userKey = (String) dataSnapshot.child("userKey").getValue();
                 editTitle.setText(post_title);
                 editDesc.setText(post_desc);
                 Picasso.with(EditPostActivity.this).load(post_image).into(singleImage);

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
 
 
 /**
@@ -46,6 +48,9 @@ public class profileFragment extends Fragment {
     private String postKey = null;
     private String userKey = null;
     private boolean test = false;
+    private String passedKey = null;
+
+    private TextView postNum;
 
     private boolean mProcessFollow = false;
 
@@ -59,8 +64,19 @@ public class profileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.fragment_profile, container, false);
+
+
         Auth = FirebaseAuth.getInstance();
+
+
+        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        //try to get passed in value from Blog Single.
+//        passedKey = getArguments().getString("profileKey");
+
+
+            myView = inflater.inflate(R.layout.fragment_profile, container, false);
+
 
 
         profilepostView = (RecyclerView) myView.findViewById(R.id.my_post_recycler);
@@ -75,10 +91,24 @@ public class profileFragment extends Fragment {
         mdatabase = FirebaseDatabase.getInstance().getReference().child("Blog");       //gets root URL from firebase account and gets all contents inside the blog folder in firebase
         musers = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        postNum =(TextView) myView.findViewById(R.id.postNumber);
 
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         musers = musers.child(userKey);
         musers = musers.child("Personal Posts");
+        musers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount()!=0)
+                {
+                    postNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         followbutton = myView.findViewById(R.id.followbtn);
 
 //        if(musers.child(userKey) != null) {
@@ -147,6 +177,7 @@ public class profileFragment extends Fragment {
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setUser(model.getName());
                 viewHolder.setDesc(model.getDesc());
+
                 viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override

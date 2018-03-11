@@ -104,6 +104,14 @@
             app:srcCompat="@drawable/thumbup" />
 
         <ImageButton
+            android:id="@+id/userPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageSingle"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/ic_face_black_24dp" />
+
+        <ImageButton
             android:id="@+id/addComment"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -112,15 +120,8 @@
             android:layout_toEndOf="@+id/likebtn"
             android:background="@drawable/chatbubble" />
 
-        <Button
-            android:id="@+id/Key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/bookmark"
-            android:layout_centerHorizontal="true"
-            android:text="User Page" />
-
     </RelativeLayout>
+
 
 
 </android.support.v4.widget.NestedScrollView>
