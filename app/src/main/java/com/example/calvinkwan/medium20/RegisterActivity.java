@@ -49,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 startRegister();
-
             }
         });
 
@@ -75,9 +74,14 @@ public class RegisterActivity extends AppCompatActivity {
                             current_user_db.child("image").setValue("default");
                             progress.dismiss();
 
-                            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                            Intent mainIntent = new Intent(RegisterActivity.this, BrowserActivity.class);
                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(mainIntent);
+                        }
+                        else
+                        {
+                            progress.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Registration is not successful", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

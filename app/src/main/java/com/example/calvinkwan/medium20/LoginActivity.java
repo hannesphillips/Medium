@@ -35,16 +35,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.ValueEventListener;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.firebase.ui.auth.AuthUI;
 
 import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity
 {
+    private static int SIGN_IN_REQUEST_CODE = 1;
     private static final String TAG = "GoogleActivity";
     private EditText loginEmailField;
     private EditText loginPasswordField;
@@ -67,7 +64,6 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
-//        setContentView(R.layout.activity_browser);
 
         database = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -99,9 +95,14 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent RegisterIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(RegisterIntent);
+                if(FirebaseAuth.getInstance().getCurrentUser() == null)
+                {
+                    //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
+                    Intent RegisterIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(RegisterIntent);
+                }
             }
+
         });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -142,7 +143,9 @@ public class LoginActivity extends AppCompatActivity
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(LoginActivity.this, "Authentication has gone wrong", Toast.LENGTH_LONG).show();
+                //Toast.makeText(LoginActivity.this, "Authentication has gone right", Toast.LENGTH_LONG).show();
+                Intent siginIntent = new Intent(LoginActivity.this, BrowserActivity.class);
+                startActivity(siginIntent);
             }
         }
     }
@@ -180,7 +183,9 @@ public class LoginActivity extends AppCompatActivity
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful())
                     {
-                        checkUserExists();
+                        Intent mainIntent = new Intent(LoginActivity.this, BrowserActivity.class);
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(mainIntent);
                     }
                     else
                     {
@@ -202,10 +207,6 @@ public class LoginActivity extends AppCompatActivity
             {
                 if(dataSnapshot.hasChild(user_id))
                 {
-//                    frag.getView().findViewById(R.id.email).set;
-//                    nameView = (TextView) frag.getView().findViewById(R.id.email);
-//                    nameView.setText(user_id);
-//                    Log.d("Test",user_id);
                     Intent mainIntent = new Intent(LoginActivity.this, BrowserActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
@@ -217,7 +218,8 @@ public class LoginActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
 
             }
         });
