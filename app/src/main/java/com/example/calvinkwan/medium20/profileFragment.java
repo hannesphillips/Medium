@@ -93,6 +93,22 @@ public class profileFragment extends Fragment {
         musers = musers.child(userKey);
         musers = musers.child("Personal Posts");
         followbutton = myView.findViewById(R.id.followbtn);
+
+        musers2.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Followers").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(mProcessFollow)
+//                {
+                    followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                    followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+//                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         if(userKey.equals(  FirebaseAuth.getInstance().getCurrentUser().getUid()))
         {
             Log.d("Name", "its is a same profile ");

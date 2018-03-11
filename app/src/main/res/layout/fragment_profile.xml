@@ -24,6 +24,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:id = "@+id/userPic"
+
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
             <TextView
@@ -128,6 +129,7 @@
             android:layout_marginLeft="260dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
+            android:visibility="visible"
             android:background="@drawable/buttonstyle"
             android:text="Follow Me"
             android:textColor="#09c6df" />
