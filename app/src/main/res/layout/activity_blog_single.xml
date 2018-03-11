@@ -9,7 +9,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/com_facebook_share_button_text_color"
         tools:context="com.example.calvinkwan.medium20.BlogSingle">
 
         <TextView
@@ -19,6 +18,7 @@
             android:layout_below="@+id/postUser"
             android:ems="10"
             android:padding="10dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/postUser"
             tools:layout_editor_absoluteX="46dp" />
@@ -40,9 +40,11 @@
             android:id="@+id/postUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bookmark"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/userPage"
             android:ems="10"
             android:padding="10dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/imageSingle"
             tools:layout_editor_absoluteX="46dp" />
@@ -68,6 +70,7 @@
             android:layout_below="@+id/display_result"
             android:ems="10"
             android:padding="20dp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/submitPost"
             app:layout_constraintTop_toBottomOf="@+id/postUser"
             app:layout_constraintVertical_bias="0.047"
@@ -87,9 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/imageSingle"
+            android:layout_alignTop="@+id/likebtn"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/cardview_light_background"
+            android:backgroundTint="@color/cardview_shadow_end_color"
             app:srcCompat="@drawable/ic_bookmark_black_24dp" />
 
         <ImageButton

@@ -274,6 +274,9 @@ public class BlogSingle extends AppCompatActivity {
                 post_name = (String) dataSnapshot.child("name").getValue();
                 post_categ = (String) dataSnapshot.child("categ").getValue();
 
+                post_name = "By: " + post_name;
+                post_categ = "Category: " + post_categ;
+
                 singleTitle.setText(post_title);
                 singleDesc.setText(post_desc);
                 singleName.setText(post_name);
