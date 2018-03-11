@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -56,7 +57,7 @@ public class BlogSingle extends AppCompatActivity {
     private ImageButton pass_Key;
     private ImageButton bookmarkButton;
     private ImageButton likeButton;
-    private ImageButton addComment;
+    private Button addComment;
 
     private Uri imageUri = null;
     int likecounter = 0;

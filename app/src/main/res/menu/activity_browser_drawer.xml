@@ -28,10 +28,7 @@
             <!--android:id="@+id/nav_search"-->
             <!--android:icon="@drawable/ic_search_black_24dp"-->
             <!--android:title="Search" />-->
-        <item
-            android:id="@+id/nav_setting_layout"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Setting" />
+
     </group>
 
     <!--<item android:title="Communicate">-->
