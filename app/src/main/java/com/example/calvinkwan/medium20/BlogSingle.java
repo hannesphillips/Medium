@@ -42,6 +42,7 @@ public class BlogSingle extends AppCompatActivity {
     private DatabaseReference temp;
     private DatabaseReference commentDatabase;
 
+
     private ImageView singleImage;
     private TextView singleTitle;
     private TextView singleDesc;
@@ -53,6 +54,7 @@ public class BlogSingle extends AppCompatActivity {
     private ImageButton addComment;
 
     private Uri imageUri = null;
+    int likecounter = 0;
 
     private String post_title;
     private String post_desc;
@@ -142,6 +144,35 @@ public class BlogSingle extends AppCompatActivity {
         Auth = FirebaseAuth.getInstance();
 
         //FOR LIKES:::
+        likes = users.child(Auth.getCurrentUser().getUid()).child("Likes");
+
+//        final DatabaseReference siddu = likes.child(postKey);
+//        if(likes.child(postKey) != null)
+//        {
+//            likeButton.setImageResource(R.drawable.whitethumb);
+//        }
+//        else if(likes.child(postKey) == null){
+//            likeButton.setImageResource(R.drawable.thumbup);
+//        }
+
+        likes.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(postKey)) {
+                    likeButton.setImageResource(R.drawable.whitethumb);
+                }
+                else {
+                    likeButton.setImageResource(R.drawable.thumbup);
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +192,7 @@ public class BlogSingle extends AppCompatActivity {
                             if(dataSnapshot.hasChild(postKey)) {
                                 Toast.makeText(BlogSingle.this, "Unliked", Toast.LENGTH_LONG).show();
                                 delLike();
+                                likeButton.setImageResource(R.drawable.thumbup);
                                 mProcessLike = false;
                         }
 
@@ -169,6 +201,7 @@ public class BlogSingle extends AppCompatActivity {
                                 newLike.child("title").setValue(post_title);
                                 newLike.child("desc").setValue(post_desc);
                                 newLike.child("postkey").setValue(postKey);
+                                likeButton.setImageResource(R.drawable.whitethumb);
 
                                 mProcessLike = false;
                             }
