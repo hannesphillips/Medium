@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity
                     }
                     else
                     {
-                        Toast.makeText(LoginActivity.this, "Account Set Up Needed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "check login:  Account Set Up Needed", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "Account Set Up Needed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "check user exists:  Account Set Up Needed", Toast.LENGTH_LONG).show();
                 }
             }
 
