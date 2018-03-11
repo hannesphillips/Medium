@@ -40,7 +40,6 @@ public class EditPostActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button editButton;
 
-    private Uri imageUri = null;
     private ImageView singleImage;
 
     private String post_title;
