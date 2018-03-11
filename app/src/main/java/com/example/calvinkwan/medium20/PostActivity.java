@@ -198,6 +198,7 @@ public class PostActivity extends AppCompatActivity {
             final String categText = postCateg.getSelectedItem().toString().trim();
 
             if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+
                 progress.show();
                 StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
                 filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
@@ -261,8 +262,10 @@ public class PostActivity extends AppCompatActivity {
 
                         DatabaseReference userPosts = currentUser.child("Posts");
                         final DatabaseReference temp = userPosts.child(newPostKey);
-
-                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                        Intent intent = new Intent(PostActivity.this, BrowserActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);       //return to timeline
                     }
                 });
             }
@@ -337,7 +340,10 @@ public class PostActivity extends AppCompatActivity {
                     DatabaseReference userPosts = currentUser.child("Posts");
                     final DatabaseReference temp = userPosts.child(newPostKey);
 
-                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                    Intent intent = new Intent(PostActivity.this, BrowserActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);       //return to timeline
                 }
             });
         }
@@ -413,7 +419,10 @@ public class PostActivity extends AppCompatActivity {
                     DatabaseReference userPosts = currentUser.child("Posts");
                     final DatabaseReference temp = userPosts.child(newPostKey);
 
-                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                    Intent intent = new Intent(PostActivity.this, BrowserActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);       //return to timeline
                 }
             });
         }
@@ -489,7 +498,10 @@ public class PostActivity extends AppCompatActivity {
                     DatabaseReference userPosts = currentUser.child("Posts");
                     final DatabaseReference temp = userPosts.child(newPostKey);
 
-                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                    Intent intent = new Intent(PostActivity.this, BrowserActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);       //return to timeline
                 }
             });
         }
