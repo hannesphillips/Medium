@@ -92,6 +92,12 @@ public class profileFragment extends Fragment {
         musers2 = musers2.child(userKey);
         musers = musers.child(userKey);
         musers = musers.child("Personal Posts");
+        followbutton = myView.findViewById(R.id.followbtn);
+        if(userKey.equals(  FirebaseAuth.getInstance().getCurrentUser().getUid()))
+        {
+            Log.d("Name", "its is a same profile ");
+            followbutton.setVisibility(myView.INVISIBLE);
+        }
         musers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -137,7 +143,7 @@ public class profileFragment extends Fragment {
 
             }
         });
-        followbutton = myView.findViewById(R.id.followbtn);
+
 
         followbutton.setOnClickListener(new View.OnClickListener() {
             @Override
