@@ -41,16 +41,22 @@ public class BrowserActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener authStateListener;
     private String postKey = null;
     private TextView nameView;
+    private String userKey = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-        if(savedInstanceState == null)
+        FragmentManager manager = getFragmentManager();
+        userKey = getIntent().getStringExtra("UID");
+        if(userKey == null)
         {
-            FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.content_frame, new myPostFragment());
             transaction.commit();
+        } else {
+            profileFragment profile = new profileFragment();
+            profile.setUser(userKey);
+            manager.beginTransaction().replace(R.id.content_frame, profile).commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
                 setSupportActionBar(toolbar);
@@ -171,10 +177,9 @@ public class BrowserActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new myPostFragment()).commit();
         }
         else if (id == R.id.nav_myPost) {
-            profileFragment idf = new profileFragment();
-//            Bundle args = new Bundle();
-//            args.putString("passKey", )
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new profileFragment()).commit();
+            profileFragment profile = new profileFragment();
+            profile.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            fragmentManager.beginTransaction().replace(R.id.content_frame, profile).commit();
         }
         else if (id == R.id.nav_bookmark) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new BookmarksFragment()).commit();

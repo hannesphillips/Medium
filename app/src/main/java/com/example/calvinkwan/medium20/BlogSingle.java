@@ -232,7 +232,6 @@ public class BlogSingle extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                profileFragment fr = new profileFragment();
 
                 DatabaseReference getcode = FirebaseDatabase.getInstance().getReference().child("Blog").child(postKey);
 //                DatabaseReference tunnel = getcode.child("userKey");
@@ -240,18 +239,9 @@ public class BlogSingle extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         final String userkey = snapshot.getValue().toString();  //prints "Do you have data? You'll love Firebase."
-//                        temp = userkey;
-                        Bundle args = new Bundle();
-                       args.putString("profileKey", userkey);
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction ft = fragmentManager.beginTransaction();
-                        profileFragment fr = new profileFragment();
-                        Log.d("userPage",  "User Key " +  args);
-                        fr.setArguments(args);
-//                        fragmentManager.beginTransaction().replace(R.id.content_frame, fr).commit();
-//                       ft.replace(R.id., new profileFragment()).commit();
-                       //Todo this is causing  a error see what they mean
-
+                        Intent userIntent = new Intent(BlogSingle.this, BrowserActivity.class);
+                        userIntent.putExtra("UID", userkey);
+                        startActivity(userIntent);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {

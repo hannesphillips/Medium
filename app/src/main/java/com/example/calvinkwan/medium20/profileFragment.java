@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
@@ -46,7 +47,6 @@ public class profileFragment extends Fragment {
     private DatabaseReference musers2;
     private FirebaseAuth Auth;
     private DatabaseReference profilePost;
-    private String postKey = null;
     private String userKey = null;
     private boolean test = false;
     private String passedKey = null;
@@ -54,15 +54,12 @@ public class profileFragment extends Fragment {
     private TextView postNum;
     private TextView followNum;
     private TextView followerNum;
+    private TextView pageName;
+    private ImageView userImg;
 
     private boolean mProcessFollow = false;
 
     private Button followbutton;
-
-    public profileFragment()
-    {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,21 +68,12 @@ public class profileFragment extends Fragment {
 
         Auth = FirebaseAuth.getInstance();
 
-
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        //try to get passed in value from Blog Single.
-//        passedKey = getArguments().getString("profileKey");
-
-
-            myView = inflater.inflate(R.layout.fragment_profile, container, false);
+        myView = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
 
         profilepostView = (RecyclerView) myView.findViewById(R.id.my_post_recycler);
 
-//        profilepostView.setHasFixedSize(true);
-//        profilepostView.setLayoutManager(new LinearLayoutManager(getActivity()));       //sets to vertical format
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -97,6 +85,8 @@ public class profileFragment extends Fragment {
         postNum =(TextView) myView.findViewById(R.id.postNumber);
         followNum =(TextView) myView.findViewById(R.id.followingNumber);
         followerNum =(TextView) myView.findViewById(R.id.followersNumber);
+        pageName =(TextView) myView.findViewById(R.id.profileName);
+        userImg =(ImageView) myView.findViewById(R.id.userPic);
 
         musers2 = FirebaseDatabase.getInstance().getReference().child("Users");
         musers2 = musers2.child(userKey);
@@ -108,6 +98,37 @@ public class profileFragment extends Fragment {
                 if(dataSnapshot.getChildrenCount()!=0)
                 {
                     postNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+
+                    musers2.child("name").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot childSnap) {
+//                            Log.d("Name",);//TODO Get the user name from the database but data isn't online
+                            Log.d("Name", childSnap.toString());
+//                            pageName.setText(childSnap.getValue().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    //this is where user image is being called
+                    musers2.child("image").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot childSnap) {
+//                            Log.d("Name", childSnap.getValue().toString());
+//                            pageName.setText(childSnap.getValue().toString());
+//                            userImg.setImageURI(downloadUri);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
 
@@ -117,10 +138,6 @@ public class profileFragment extends Fragment {
             }
         });
         followbutton = myView.findViewById(R.id.followbtn);
-
-//        if(musers.child(userKey) != null) {
-//            followbutton.setVisibility(followbutton.GONE);
-//        }
 
         followbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,11 +278,7 @@ public class profileFragment extends Fragment {
 
     }
 
-    private void addtopersonal()
-    {
-        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference addBookmark = musers.child(user_key);
-        DatabaseReference here = addBookmark.child("Bookmarks");
-        final DatabaseReference newBookmark = here.child(postKey);
+    public void setUser(String uid) {
+        userKey = uid;
     }
 }
