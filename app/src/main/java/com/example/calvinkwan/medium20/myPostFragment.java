@@ -3,6 +3,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,13 @@ public class myPostFragment extends Fragment {
 ////                Toast.makeText(getActivity(), "Bookmarked", Toast.LENGTH_LONG).show();
 //            }
 //        });
+
+//        // Save state
+//        Parcelable recyclerViewState;
+//        recyclerViewState = blogList.getLayoutManager().onSaveInstanceState();
+//
+//// Restore state
+//        blogList.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         return myView;
     }

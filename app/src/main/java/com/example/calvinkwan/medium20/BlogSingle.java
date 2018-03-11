@@ -65,7 +65,7 @@ public class BlogSingle extends AppCompatActivity {
     private int flag;
     private boolean bkbut = false;
 
-    private RecyclerView comments;
+    // private RecyclerView comments;
 
     boolean mProcessLike = false;
 
@@ -129,14 +129,14 @@ public class BlogSingle extends AppCompatActivity {
         likeButton = findViewById(R.id.likebtn);
         addComment = findViewById(R.id.addComment);
 
-        comments = findViewById(R.id.my_post_recycler);
-        comments.setHasFixedSize(true);
-        comments.setLayoutManager(new LinearLayoutManager(this));
+//        comments = findViewById(R.id.my_post_recycler);
+//        comments.setHasFixedSize(true);
+//        comments.setLayoutManager(new LinearLayoutManager(this));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
-        comments.setLayoutManager(layoutManager);
-        comments.setNestedScrollingEnabled(false);
+//        comments.setLayoutManager(layoutManager);
+//        comments.setNestedScrollingEnabled(false);
 
         commentDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         commentDatabase = commentDatabase.child(postKey);
@@ -392,7 +392,6 @@ public class BlogSingle extends AppCompatActivity {
     }
 
     void addComment() {
-        Toast.makeText(BlogSingle.this, "Comment", Toast.LENGTH_LONG).show();
         Intent toComment = new Intent(this, ViewComments.class);
         toComment.putExtra("blog_id", postKey);
         startActivity(toComment);
