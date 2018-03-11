@@ -90,7 +90,7 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sendPost();
 
-                           }
+            }
         });
 
 
@@ -98,8 +98,7 @@ public class PostActivity extends AppCompatActivity {
         users = FirebaseDatabase.getInstance().getReference().child("Users");
         users.child(user_key).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
             }
 
@@ -110,99 +109,99 @@ public class PostActivity extends AppCompatActivity {
         });
 
     }
+
     boolean mProcessLike = false;
-    private void addPost()
-    {
+
+    private void addPost() {
 
         user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference postID = users.child(user_key);
         final DatabaseReference firststep = postID.child("PostId").push();
 //        postKey = getIntent().getExtras().getString("post_id");
         firststep.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            if (mProcessLike) {
-                Log.d("Test", "Fk" + postKey);
-                System.out.println(dataSnapshot.getKey());
-                if (dataSnapshot.hasChild(postKey)) {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (mProcessLike) {
+                    Log.d("Test", "Fk" + postKey);
+                    System.out.println(dataSnapshot.getKey());
+                    if (dataSnapshot.hasChild(postKey)) {
 //                        delLike();
-                    mProcessLike = false;
-                }
+                        mProcessLike = false;
+                    }
 
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    });
+        });
 
     }
+
     private void sendPost() {
-            progress.setMessage("Posting to blog...");
-            final String titleText = postTitle.getText().toString().trim();
-            final String descText = postDescription.getText().toString().trim();
-            final String categText = postCateg.getSelectedItem().toString().trim();
+        progress.setMessage("Posting to blog...");
+        final String titleText = postTitle.getText().toString().trim();
+        final String descText = postDescription.getText().toString().trim();
+        final String categText = postCateg.getSelectedItem().toString().trim();
 
-            if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
-                progress.show();
-                StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
-                filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-                {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                    {
-                        Uri downloadUri = taskSnapshot.getDownloadUrl();
-                        final DatabaseReference newPost = database.push();
+        if (!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText) && imageUri != null) {
+            progress.show();
+            StorageReference filePath = storage.child("Blog_Images").child(imageUri.getLastPathSegment());
+            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    final DatabaseReference newPost = database.push();
 
-                        String newPostKey = newPost.getKey();
-                        newPost.child("title").setValue(titleText);
-                        newPost.child("desc").setValue(descText);
-                        newPost.child("image").setValue(downloadUri.toString());
-                        newPost.child("categ").setValue(categText);
+                    String newPostKey = newPost.getKey();
+                    newPost.child("title").setValue(titleText);
+                    newPost.child("desc").setValue(descText);
+                    newPost.child("image").setValue(downloadUri.toString());
+                    newPost.child("categ").setValue(categText);
 
 //                        final DatabaseReference new = here.child(postKey);
 
-                        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        newPost.child("userKey").setValue(user_key);
-                        users = FirebaseDatabase.getInstance().getReference().child("Users");
-                        users.child(user_key).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                final String u  = (String) dataSnapshot.child("name").getValue();
-                                newPost.child("name").setValue(u);
+                    String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    newPost.child("userKey").setValue(user_key);
+                    users = FirebaseDatabase.getInstance().getReference().child("Users");
+                    users.child(user_key).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final String u = (String) dataSnapshot.child("name").getValue();
+                            newPost.child("name").setValue(u);
 
-                            }
+                        }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
-
-
-                        progress.dismiss();
-                        DatabaseReference currentUser = users.child(user_key);
-
-                        DatabaseReference userPosts = currentUser.child("Posts");
-                        final DatabaseReference temp = userPosts.child(newPostKey);
-
-                        startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
-                    }
-                });
-            }
-        }
+                        }
+                    });
 
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-                imageUri = data.getData();
-                selectImage.setImageURI(imageUri);
-            }
+                    progress.dismiss();
+                    DatabaseReference currentUser = users.child(user_key);
+
+                    DatabaseReference userPosts = currentUser.child("Posts");
+                    final DatabaseReference temp = userPosts.child(newPostKey);
+
+                    startActivity(new Intent(PostActivity.this, BrowserActivity.class));       //return to timeline
+                }
+            });
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+            imageUri = data.getData();
+            selectImage.setImageURI(imageUri);
+        }
+    }
+}
 
