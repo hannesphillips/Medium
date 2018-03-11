@@ -18,6 +18,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".BlogSingle" />
         <activity android:name=".EditPostActivity" />
+        <activity android:name=".ViewComments" />
         <activity
             android:name=".BrowserActivity"
             android:theme="@style/AppTheme.NoActionBar">
