@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/com_facebook_share_button_text_color"
         tools:context="com.example.calvinkwan.medium20.BlogSingle">
 
         <TextView
@@ -99,6 +100,7 @@
             android:layout_below="@+id/imageSingle"
             android:layout_centerVertical="true"
             android:layout_marginStart="11dp"
+            android:backgroundTint="@color/cardview_light_background"
             app:srcCompat="@drawable/thumbup" />
 
         <ImageButton

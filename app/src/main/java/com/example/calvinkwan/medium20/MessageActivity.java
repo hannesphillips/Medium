@@ -41,7 +41,7 @@ public class MessageActivity extends AppCompatActivity {
        {
            if(resultCode == RESULT_OK)
            {
-               Snackbar.make(activity_main, "Successfully signed in, Welcom!!", Snackbar.LENGTH_SHORT).show();
+               Snackbar.make(activity_main, "Successfully signed in, Welcome!!", Snackbar.LENGTH_SHORT).show();
                //displayChatMessage();
            }
            else

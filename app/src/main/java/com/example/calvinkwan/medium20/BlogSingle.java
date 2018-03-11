@@ -43,6 +43,7 @@ public class BlogSingle extends AppCompatActivity {
     private DatabaseReference commentDatabase;
 
 
+
     private ImageView singleImage;
     private TextView singleTitle;
     private TextView singleDesc;
@@ -56,6 +57,7 @@ public class BlogSingle extends AppCompatActivity {
     private Uri imageUri = null;
     int likecounter = 0;
 
+    int LIKE = likecounter;
     private String post_title;
     private String post_desc;
     private String post_image;
@@ -147,14 +149,6 @@ public class BlogSingle extends AppCompatActivity {
         //FOR LIKES:::
         likes = users.child(Auth.getCurrentUser().getUid()).child("Likes");
 
-//        final DatabaseReference siddu = likes.child(postKey);
-//        if(likes.child(postKey) != null)
-//        {
-//            likeButton.setImageResource(R.drawable.whitethumb);
-//        }
-//        else if(likes.child(postKey) == null){
-//            likeButton.setImageResource(R.drawable.thumbup);
-//        }
 
         likes.addValueEventListener(new ValueEventListener() {
             @Override
@@ -195,7 +189,7 @@ public class BlogSingle extends AppCompatActivity {
                                 delLike();
                                 likeButton.setImageResource(R.drawable.thumbup);
                                 mProcessLike = false;
-                        }
+                            }
 
                         else {
                                 Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
@@ -213,9 +207,13 @@ public class BlogSingle extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
+
                 });
             }
         });
+
+        Log.d("Like counter", String.valueOf(likecounter));
+
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
