@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/actionGoHome"
+        android:icon="@mipmap/ic_home_white_24dp"
+        app:showAsAction="always"
+        android:title="GoHome"/>
+
+</menu>

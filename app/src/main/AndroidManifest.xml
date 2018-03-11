@@ -18,7 +18,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".BlogSingle" />
         <activity android:name=".EditPostActivity" />
-        <activity android:name=".ViewComments" />
+        <activity android:name=".ViewComments"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".BrowserActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -37,6 +38,7 @@
         <activity
             android:name=".MessageActivity"
             android:label="@string/title_activity_message"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
