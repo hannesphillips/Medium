@@ -126,15 +126,15 @@ public class MessageActivity extends AppCompatActivity {
                 temp = temp.child("left");
                 final String tempID  = temp.getKey();
 //                if()
-                if(model.getMessageId()!=null) {
+//                if(model.getMessageId()!=null) {
                     messageText.setText(model.getMessageText());
                     messageUser.setText(model.getMessageUser());
                     messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
-                }
-                else {
+//                }
+//                else {
                     Log.d("Message"," Yes " + temp + " this is user " + model.getMessageId());
 //
-                }
+//                }
 
 //                if( FirebaseAuth.getInstance().getCurrentUser().getUid().equals(messageID))
 //                {
