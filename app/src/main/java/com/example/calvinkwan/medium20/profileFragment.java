@@ -126,7 +126,7 @@ public class profileFragment extends Fragment {
                         public void onDataChange(DataSnapshot childSnap) {
 //                            Log.d("Name",);//TODO Get the user name from the database but data isn't online
                             Log.d("Name", childSnap.toString());
-//                            pageName.setText(childSnap.getValue().toString());
+                            pageName.setText(childSnap.getValue().toString());
                         }
 
                         @Override
