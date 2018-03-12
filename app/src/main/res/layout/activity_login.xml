@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="326dp"
         android:adjustViewBounds="false"
         app:srcCompat="@drawable/logo" />
 
@@ -23,12 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_marginTop="189dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="167dp"
         android:drawableLeft="@drawable/ic_person_white_24dp"
+
         android:ems="10"
         android:hint="Email"
-
         android:inputType="textEmailAddress" />
 
     <EditText
