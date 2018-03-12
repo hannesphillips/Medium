@@ -162,6 +162,40 @@ public class profileFragment extends Fragment {
                     });
 
                 }
+                else
+                {
+                    postNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+
+                    musers2.child("name").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot childSnap) {
+//                            Log.d("Name",);//TODO Get the user name from the database but data isn't online
+                            Log.d("Name", childSnap.toString());
+                            pageName.setText(childSnap.getValue().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    //this is where user image is being called
+                    musers2.child("image").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot childSnap) {
+//                            Log.d("Name", childSnap.getValue().toString());
+//                            pageName.setText(childSnap.getValue().toString());
+//                            userImg.setImageURI(downloadUri);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
 
             @Override
