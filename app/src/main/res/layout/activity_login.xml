@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/loginPasswordField"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="326dp"
+        android:layout_marginBottom="109dp"
         android:adjustViewBounds="false"
         app:srcCompat="@drawable/logo" />
 
