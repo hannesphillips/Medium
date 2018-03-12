@@ -1,8 +1,10 @@
 package com.example.calvinkwan.medium20;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -410,9 +412,17 @@ public class BlogSingle extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if(item.getItemId() == R.id.del_post) {
-            delPost();
-            Intent toMain = new Intent(this, BrowserActivity.class);
-            startActivity(toMain);
+            AlertDialog alert = new AlertDialog.Builder(this).create();
+            alert.setMessage("Delete post?");
+            alert.setButton(AlertDialog.BUTTON_NEUTRAL, "Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    delPost();
+                    Intent toMain = new Intent(BlogSingle.this, BrowserActivity.class);
+                    startActivity(toMain);
+                }
+            });
+
         }
         else if(item.getItemId() == R.id.edit) {
             Intent editPost = new Intent(BlogSingle.this, EditPostActivity.class);
