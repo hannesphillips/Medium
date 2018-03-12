@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -94,14 +95,10 @@ public class profileFragment extends Fragment {
         musers = musers.child("Personal Posts");
         followbutton = myView.findViewById(R.id.followbtn);
 
-        musers2.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Followers").addValueEventListener(new ValueEventListener() {
+        musers2.child("Followers").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(mProcessFollow)
-//                {
-                    followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
-                    followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
-//                }
+                followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
             }
 
             @Override
@@ -109,6 +106,19 @@ public class profileFragment extends Fragment {
 
             }
         });
+
+        musers2.child("Following").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         if(userKey.equals(  FirebaseAuth.getInstance().getCurrentUser().getUid()))
         {
             Log.d("Name", "its is a same profile ");
@@ -166,38 +176,45 @@ public class profileFragment extends Fragment {
             public void onClick(View v) {
                 final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                DatabaseReference addFollower = musers2.child(userkey);
-                DatabaseReference foo = addFollower.child("Followers");
-                final DatabaseReference newFollower = foo.child(userkey);
+               // DatabaseReference addFollower = musers2.child(userkey);
+                DatabaseReference addFollower = musers2.child("Followers");
+                final DatabaseReference newFollower = addFollower.child(userkey);
 
+                final DatabaseReference addFollowing = FirebaseDatabase.getInstance().getReference().child("Users").child(userkey);
+                final DatabaseReference newFollowing = addFollowing.child("Following").child(userKey);
+
+               // Log.d("Follower num: ","I shit u not");
                 mProcessFollow = true;
 
-                foo.addValueEventListener(new ValueEventListener() {
+                addFollower.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         if(mProcessFollow)
                         {
                             if(dataSnapshot.hasChild(userkey)) {
                                 //Log.d("datasnapshot: ", userkey);
                                 Toast.makeText(getActivity(), "Unfollowed", Toast.LENGTH_LONG).show();
-                                musers2.child(userkey).child("Followers").removeValue();
+                                musers2.child("Followers").child(userkey).removeValue();
+                                addFollowing.child("Following").child(userKey).removeValue();
                                 mProcessFollow = false;
-//                               followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
-//                               Todo fix the datasnahpshot variable for follower
-//                               followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
                             }
 
                             else {
                                 Toast.makeText(getActivity(), "Followed", Toast.LENGTH_LONG).show();
                                 newFollower.child("userkey").setValue(userkey);
+                                newFollowing.child("USERKEY").setValue(userKey);
+
+                                Log.d("FOLLOW CHECK:", userkey);
+                                Log.d("Follow check 2:", userKey);
 
                                 mProcessFollow = false;
-//                                followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
-//                                //Todo fix the datasnahpshot variable for follower
-//                                followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+
                             }
-                        } followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
-                        followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                        }
+                       // followNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                       // followerNum.setText(Long.toString(dataSnapshot.getChildrenCount()));
+
                     }
 
                     @Override
@@ -206,6 +223,7 @@ public class profileFragment extends Fragment {
                     }
                 });
             }
+
         });
 
 

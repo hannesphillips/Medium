@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 public class BlogSingle extends AppCompatActivity {
     private String postKey = null;
 
@@ -44,9 +47,9 @@ public class BlogSingle extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference bookmarks;
     private DatabaseReference users;
-    private DatabaseReference likes;
     private DatabaseReference temp;
     private DatabaseReference commentDatabase;
+    private DatabaseReference like;
 
 
 
@@ -62,9 +65,8 @@ public class BlogSingle extends AppCompatActivity {
     private Button addComment;
 
     private Uri imageUri = null;
-    int likecounter = 0;
+    private TextView likecounter;
 
-    int LIKE = likecounter;
     private String post_title;
     private String post_desc;
     private String post_image;
@@ -75,6 +77,7 @@ public class BlogSingle extends AppCompatActivity {
     private boolean bkbut = false;
 
     // private RecyclerView comments;
+    int count = 0;
 
     boolean mProcessLike = false;
 
@@ -91,7 +94,8 @@ public class BlogSingle extends AppCompatActivity {
         storage = FirebaseStorage.getInstance().getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         users = FirebaseDatabase.getInstance().getReference().child("Users");
-        likes = FirebaseDatabase.getInstance().getReference().child("Likes");
+
+        likecounter = findViewById(R.id.likecounter);
 
         postKey = getIntent().getExtras().getString("blog_id");
         temp = users.child("Posts");
@@ -155,17 +159,20 @@ public class BlogSingle extends AppCompatActivity {
         Auth = FirebaseAuth.getInstance();
 
         //FOR LIKES:::
-        likes = users.child(Auth.getCurrentUser().getUid()).child("Likes");
-
-
-        likes.addValueEventListener(new ValueEventListener() {
+       // likes = users.child(Auth.getCurrentUser().getUid()).child("Likes");
+        like = FirebaseDatabase.getInstance().getReference().child("Blog").child(postKey);
+        Log.d("postKey2:", postKey);
+        like.child("Likes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(postKey)) {
+                System.out.println(dataSnapshot);
+                if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     likeButton.setImageResource(R.drawable.whitethumb);
+                    likecounter.setText(Long.toString(dataSnapshot.getChildrenCount()));
                 }
                 else {
                     likeButton.setImageResource(R.drawable.thumbup);
+                    likecounter.setText(Long.toString(dataSnapshot.getChildrenCount()));
                 }
             }
 
@@ -181,9 +188,14 @@ public class BlogSingle extends AppCompatActivity {
             public void onClick(View v) {
                 final String userkey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                DatabaseReference addLike = users.child(userkey);
+//                DatabaseReference addLike = users.child(userkey);
+//                DatabaseReference blah = addLike.child("Likes");
+//                final DatabaseReference newLike = blah.child(postKey);
+
+                DatabaseReference addLike = like;
                 DatabaseReference blah = addLike.child("Likes");
-                final DatabaseReference newLike = blah.child(postKey);
+                final DatabaseReference newLike = blah.child(userkey);
+
                 mProcessLike = true;
 
                 blah.addValueEventListener(new ValueEventListener() {
@@ -192,7 +204,7 @@ public class BlogSingle extends AppCompatActivity {
                         if(mProcessLike)
                         {
                             System.out.println(dataSnapshot.getKey());
-                            if(dataSnapshot.hasChild(postKey)) {
+                            if(dataSnapshot.hasChild(userkey)) {
                                 Toast.makeText(BlogSingle.this, "Unliked", Toast.LENGTH_LONG).show();
                                 delLike();
                                 likeButton.setImageResource(R.drawable.thumbup);
@@ -202,8 +214,8 @@ public class BlogSingle extends AppCompatActivity {
                         else {
                                 Toast.makeText(BlogSingle.this, "Liked", Toast.LENGTH_LONG).show();
                                 newLike.child("title").setValue(post_title);
-                                newLike.child("desc").setValue(post_desc);
-                                newLike.child("postkey").setValue(postKey);
+                                //newLike.child("desc").setValue(post_desc);
+                                newLike.child("userkey").setValue(userkey);
                                 likeButton.setImageResource(R.drawable.whitethumb);
 //                                pass_Key.setImage
                                 mProcessLike = false;
@@ -219,8 +231,6 @@ public class BlogSingle extends AppCompatActivity {
                 });
             }
         });
-
-        Log.d("Like counter", String.valueOf(likecounter));
 
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,10 +357,10 @@ public class BlogSingle extends AppCompatActivity {
     }
 
     void delLike() {
-        mDatabase = users;
+        //mDatabase = users;
         String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabase = mDatabase.child(user_key).child("Likes");
-        mDatabase.child(postKey).removeValue();
+        //mDatabase = mDatabase.child(postKey).child("Likes");
+        like.child("Likes").child(user_key).removeValue();
         //finish();
     }
 

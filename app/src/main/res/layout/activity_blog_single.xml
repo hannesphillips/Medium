@@ -97,6 +97,23 @@
             android:background="@null"
             app:srcCompat="@drawable/thumbup" />
 
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@id/likebtn"
+            android:layout_toRightOf="@id/likebtn">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/likecounter"
+                android:text="0"
+                android:textSize="20sp"
+                android:textColor="@color/com_facebook_blue"/>
+
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/userPage"
             android:layout_width="45dip"
