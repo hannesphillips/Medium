@@ -414,7 +414,13 @@ public class BlogSingle extends AppCompatActivity {
         if(item.getItemId() == R.id.del_post) {
             AlertDialog alert = new AlertDialog.Builder(this).create();
             alert.setMessage("Delete post?");
-            alert.setButton(AlertDialog.BUTTON_NEUTRAL, "Delete", new DialogInterface.OnClickListener() {
+            alert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     delPost();
@@ -422,6 +428,7 @@ public class BlogSingle extends AppCompatActivity {
                     startActivity(toMain);
                 }
             });
+            alert.show();
 
         }
         else if(item.getItemId() == R.id.edit) {
