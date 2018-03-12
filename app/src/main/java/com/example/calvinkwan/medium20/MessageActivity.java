@@ -110,7 +110,7 @@ public class MessageActivity extends AppCompatActivity {
 
    private void displayChatMessage()
    {
-        ListView listOfMessages = findViewById(R.id.list_of_messages);
+        final ListView listOfMessages = findViewById(R.id.list_of_messages);
         adapter = new FirebaseListAdapter<publicMessageChat>(this, publicMessageChat.class, R.layout.list_of_items, FirebaseDatabase.getInstance().getReference())
         {
             @Override
@@ -132,6 +132,7 @@ public class MessageActivity extends AppCompatActivity {
 //                {
 //                    Log.d("Message"," Yes right side");
 //                }
+
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
@@ -139,6 +140,7 @@ public class MessageActivity extends AppCompatActivity {
         };
 //        final ListView lv  (ListView) findView
         listOfMessages.setAdapter(adapter);
+
 //        listOfMessages.
    }
 }
