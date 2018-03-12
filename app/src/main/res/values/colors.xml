@@ -12,6 +12,8 @@
     <color name="middle">#ffb688</color>
     <color name="middle2">#ffb527</color>
     <color name="base">#ffe3b5</color>
+    <color name="chatcolor">#f7d1ad</color>
+
 
     <color name="startblue">#ffb22d</color>
 </resources>
