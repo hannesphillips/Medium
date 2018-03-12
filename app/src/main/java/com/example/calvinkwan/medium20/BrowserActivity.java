@@ -92,26 +92,28 @@ public class BrowserActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        users = FirebaseDatabase.getInstance().getReference().child("Users");
-        String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        View header = navigationView.getHeaderView(0);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String emailString = user.getEmail();
-        TextView email = header.findViewById(R.id.email);
-        email.setText(emailString);
-        final TextView username = header.findViewById(R.id.userName);
-        users.child(user_key).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = (String) dataSnapshot.child("name").getValue();
-                username.setText(name);
-            }
+        if(Auth.getInstance().getCurrentUser() != null) {
+            users = FirebaseDatabase.getInstance().getReference().child("Users");
+            String user_key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            View header = navigationView.getHeaderView(0);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String emailString = user.getEmail();
+            TextView email = header.findViewById(R.id.email);
+            email.setText(emailString);
+            final TextView username = header.findViewById(R.id.userName);
+            users.child(user_key).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String name = (String) dataSnapshot.child("name").getValue();
+                    username.setText(name);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
     }
     public static class BlogViewHolder extends RecyclerView.ViewHolder
