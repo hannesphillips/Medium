@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String user_id = auth.getCurrentUser().getUid();        //retrives the unique ID generated at user account creation and stores it in user_ID
                             DatabaseReference current_user_db = database.child(user_id);
-  
+
                             current_user_db.child("name").setValue(name);
                             current_user_db.child("image").setValue("default");
                             progress.dismiss();
