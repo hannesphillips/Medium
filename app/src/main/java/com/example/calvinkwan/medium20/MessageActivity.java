@@ -126,16 +126,22 @@ public class MessageActivity extends AppCompatActivity {
                 temp = temp.child("left");
                 final String tempID  = temp.getKey();
 //                if()
-                Log.d("Message"," Yes " + temp + " this is user " + model.getMessageId());
+                if(model.getMessageId()!=null) {
+                    messageText.setText(model.getMessageText());
+                    messageUser.setText(model.getMessageUser());
+                    messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
+                }
+                else {
+                    Log.d("Message"," Yes " + temp + " this is user " + model.getMessageId());
+//
+                }
 
 //                if( FirebaseAuth.getInstance().getCurrentUser().getUid().equals(messageID))
 //                {
 //                    Log.d("Message"," Yes right side");
 //                }
 
-                messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
+
             }
         };
 //        final ListView lv  (ListView) findView
