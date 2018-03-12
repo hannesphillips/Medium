@@ -188,14 +188,20 @@ public class LoginActivity extends AppCompatActivity
                     }
                     else
                     {
-                        Toast.makeText(LoginActivity.this, "check login:  Account Set Up Needed", Toast.LENGTH_LONG).show();
+                        loginEmailField.setError("Please Register");
+//                        Toast.makeText(LoginActivity.this, "check login:  Account Set Up Needed", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
         else
         {
-            Toast.makeText(LoginActivity.this, "Please fill in a email and a password", Toast.LENGTH_LONG).show();
+            if(loginEmailField.length()<7)
+            {
+                loginEmailField.setError("Email isn't valid email");
+            }
+            loginPasswordField.setError("Password is blank");
+//            Toast.makeText(LoginActivity.this, "Please fill in a email and a password", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -216,7 +222,8 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "check user exists:  Account Set Up Needed", Toast.LENGTH_LONG).show();
+                    loginEmailField.setError("Please Register");
+//                    Toast.makeText(LoginActivity.this, "check user exists:  Account Set Up Needed", Toast.LENGTH_LONG).show();
                 }
             }
 

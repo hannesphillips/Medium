@@ -1,52 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/startblue"
     tools:context="com.example.calvinkwan.medium20.LoginActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        android:adjustViewBounds="false"
+        app:srcCompat="@drawable/logo" />
 
     <EditText
         android:id="@+id/loginEmailField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_marginTop="189dp"
+        android:drawableLeft="@drawable/ic_person_white_24dp"
         android:ems="10"
         android:hint="Email"
+
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/loginPasswordField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/loginEmailField"
+
+        android:layout_marginTop="20sp"
         android:layout_below="@+id/loginEmailField"
         android:ems="10"
         android:hint="Password"
+        android:drawableLeft="@drawable/ic_lock_white_24dp"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
+        android:background="@color/graylight"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/registrationButton"
         android:layout_below="@+id/loginPasswordField"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp"
+        android:layout_marginTop="40dp"
         android:text="Login" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleBtn"
-        android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"></com.google.android.gms.common.SignInButton>
+        android:layout_width="200sp"
+        android:background="@color/graylight"
+        ></com.google.android.gms.common.SignInButton>
 
     <Button
         android:id="@+id/registrationButton"
-        android:layout_width="wrap_content"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/googleBtn"
+        android:background="@color/graylight"
+        android:layout_below="@+id/googleBtn"
         android:text="Need A New Account?" />
 </android.widget.RelativeLayout>
