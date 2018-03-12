@@ -9,6 +9,9 @@
     <color name="graylight">#fafafa</color>
     <color name="blakc">#000</color>
     <color name="endblue">#ffb638</color>
+    <color name="middle">#ffb688</color>
+    <color name="middle2">#ffb527</color>
+    <color name="base">#ffe3b5</color>
 
     <color name="startblue">#ffb22d</color>
 </resources>
